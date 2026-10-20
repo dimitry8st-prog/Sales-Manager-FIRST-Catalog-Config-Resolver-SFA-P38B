@@ -1,0 +1,9 @@
+command: python -B RUN_CHECKS.py baseline
+cwd: clean copy 2 extracted from 06_Dmitriev.zip
+overlay: source/first_materials_integration/catalog_config.py
+overlay: candidate_tests/test_catalog_config.py
+python: 3.12.8 (tags/v3.12.8:2dc476b, Dec  3 2024, 19:30:04) [MSC v.1942 64 bit (AMD64)]
+platform: Windows-11-10.0.26300-SP0
+exit: 0
+implementation_sha256: b678ea0499ba737ced73e239e9ff9b5034a15926cdc10c04101a923d6ea8bd78
+candidate_test_sha256: 2560fd7d65d91686e0722e520e99f0a575abf75dae0e857255e802c4c4e8df16

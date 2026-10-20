@@ -1,0 +1,11 @@
+command: git -c core.autocrlf=false apply --check return.patch
+git apply --check exit=0
+command: git -c core.autocrlf=false apply return.patch
+git apply exit=0
+check_stderr=
+apply_stderr=
+byte_match=True
+match=True b678ea0499ba737ced73e239e9ff9b5034a15926cdc10c04101a923d6ea8bd78 06_Dmitriev/SFA-P38B-DEV-R1/source/first_materials_integration/catalog_config.py
+match=True 2560fd7d65d91686e0722e520e99f0a575abf75dae0e857255e802c4c4e8df16 06_Dmitriev/SFA-P38B-DEV-R1/candidate_tests/test_catalog_config.py
+match=True ced2f5c382346fc2db9dac1db85f940c600c1fb6e543a11f41faf39dfda88531 06_Dmitriev/SFA-P38B-DEV-R1/CHANGELOG.md
+match=True 1e796cf0d56f59b9e3121fc362d4150f5587665b801456466f4e7fef88689742 06_Dmitriev/SFA-P38B-DEV-R1/TRACEABILITY.json

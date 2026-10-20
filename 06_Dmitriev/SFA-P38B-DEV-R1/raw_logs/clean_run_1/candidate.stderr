@@ -1,0 +1,27 @@
+test_call_order_exact_scope_and_single_dependency_calls (test_catalog_config.CatalogConfigCandidateTests.test_call_order_exact_scope_and_single_dependency_calls) ... ok
+test_campaign_id_rejected_before_clock_and_service (test_catalog_config.CatalogConfigCandidateTests.test_campaign_id_rejected_before_clock_and_service) ... ok
+test_canonical_uuid_reaches_real_service_without_version_tightening (test_catalog_config.CatalogConfigCandidateTests.test_canonical_uuid_reaches_real_service_without_version_tightening) ... ok
+test_capability_change_after_success_is_visible (test_catalog_config.CatalogConfigCandidateTests.test_capability_change_after_success_is_visible) ... ok
+test_clock_exception_is_the_same_object (test_catalog_config.CatalogConfigCandidateTests.test_clock_exception_is_the_same_object) ... ok
+test_constructor_calls_nothing (test_catalog_config.CatalogConfigCandidateTests.test_constructor_calls_nothing) ... ok
+test_consumer_exception_is_the_same_object (test_catalog_config.CatalogConfigCandidateTests.test_consumer_exception_is_the_same_object) ... ok
+test_expiry_after_success_is_not_cached (test_catalog_config.CatalogConfigCandidateTests.test_expiry_after_success_is_not_cached) ... ok
+test_foreign_client_is_refused (test_catalog_config.CatalogConfigCandidateTests.test_foreign_client_is_refused) ... ok
+test_fresh_scope_after_a_consumer_mutates_the_previous_one (test_catalog_config.CatalogConfigCandidateTests.test_fresh_scope_after_a_consumer_mutates_the_previous_one) ... ok
+test_invalid_configuration_matrix (test_catalog_config.CatalogConfigCandidateTests.test_invalid_configuration_matrix) ... ok
+test_is_id_boundaries_are_not_tightened (test_catalog_config.CatalogConfigCandidateTests.test_is_id_boundaries_are_not_tightened) ... ok
+test_missing_authentication_is_refused (test_catalog_config.CatalogConfigCandidateTests.test_missing_authentication_is_refused) ... ok
+test_missing_capability_is_not_added (test_catalog_config.CatalogConfigCandidateTests.test_missing_capability_is_not_added) ... ok
+test_module_stays_on_public_imports_and_namespace_package (test_catalog_config.CatalogConfigCandidateTests.test_module_stays_on_public_imports_and_namespace_package) ... ok
+test_naive_and_wrong_clock_do_not_call_service (test_catalog_config.CatalogConfigCandidateTests.test_naive_and_wrong_clock_do_not_call_service) ... ok
+test_no_added_authority_io_or_system_clock (test_catalog_config.CatalogConfigCandidateTests.test_no_added_authority_io_or_system_clock) ... ok
+test_real_catalog_consumer_f128_positive (test_catalog_config.CatalogConfigCandidateTests.test_real_catalog_consumer_f128_positive) ... ok
+test_repeat_read_uses_dependencies_again (test_catalog_config.CatalogConfigCandidateTests.test_repeat_read_uses_dependencies_again) ... ok
+test_results_are_deep_independent_and_inputs_stay_unchanged (test_catalog_config.CatalogConfigCandidateTests.test_results_are_deep_independent_and_inputs_stay_unchanged) ... ok
+test_revoke_after_success_is_not_cached (test_catalog_config.CatalogConfigCandidateTests.test_revoke_after_success_is_not_cached) ... ok
+test_version_is_pinned_and_missing_version_has_no_fallback (test_catalog_config.CatalogConfigCandidateTests.test_version_is_pinned_and_missing_version_has_no_fallback) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.038s
+
+OK

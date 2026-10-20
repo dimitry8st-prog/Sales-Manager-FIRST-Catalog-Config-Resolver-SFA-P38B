@@ -1,0 +1,4 @@
+Это повторный чистый запуск неизменённого ZIP через subprocess.
+Он нужен, потому что первый запуск в PowerShell обернул stderr своими сообщениями.
+Коды выхода первого запуска были теми же: integrity 0, baseline 0, acceptance 3, candidate 4.
+Stdout первого запуска сохранён в raw_logs/pre_implementation_first_stdout/.

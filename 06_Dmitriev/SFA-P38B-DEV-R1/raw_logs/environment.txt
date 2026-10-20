@@ -1,0 +1,6 @@
+python=3.12.8 (tags/v3.12.8:2dc476b, Dec  3 2024, 19:30:04) [MSC v.1942 64 bit (AMD64)]
+platform=Windows-11-10.0.26300-SP0
+executable=C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe
+agents_md=ABSENT in workspace, kit and GitHub root at the time of this work
+git_baseline=cecad64a1d595615b5156cc399ac7ab6b9fc1d32
+original_zip_sha256=e6208caa91704c67b052f65681f0b59df54aaf5adf4af79fc67c54fddb382a7d

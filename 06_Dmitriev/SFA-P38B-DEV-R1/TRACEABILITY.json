@@ -1,0 +1,124 @@
+{
+  "task_id": "SFA-P38B-DEV-R1",
+  "technical_revision": "R1",
+  "packaging_revision": "H2-AUDIT-FIX1",
+  "boundary": "CATALOG_TO_F128_COMPONENT_ONLY",
+  "implementation": "source/first_materials_integration/catalog_config.py",
+  "implementation_sha256": "b678ea0499ba737ced73e239e9ff9b5034a15926cdc10c04101a923d6ea8bd78",
+  "candidate_test": "candidate_tests/test_catalog_config.py",
+  "candidate_test_sha256": "2560fd7d65d91686e0722e520e99f0a575abf75dae0e857255e802c4c4e8df16",
+  "clean_runs": [
+    "raw_logs/clean_run_1/",
+    "raw_logs/clean_run_2/"
+  ],
+  "cases": [
+    {
+      "requirement": "Публичный вызов make_catalog_config_resolver возвращает callable, который читает реальный каталог и отдаёт его в F128; release_mode остаётся NO_OUTBOUND.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_real_catalog_consumer_f128_positive; checks/test_acceptance.py::test_real_catalog_consumer_F128_positive",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout; raw_logs/clean_run_2/candidate.stdout; raw_logs/clean_run_2/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Конструктор проверяет service.execute, clock и is_id, не вызывает сервис и часы и при нарушении даёт только INVALID_RESOLVER_CONFIGURATION.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_constructor_calls_nothing; candidate_tests/test_catalog_config.py::test_invalid_configuration_matrix; checks/test_acceptance.py::test_constructor_has_zero_effect; checks/test_acceptance.py::test_invalid_constructor_values",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "client_id и catalog_version принимаются ровно по существующему is_id, включая границы Unicode, без дополнительного ужесточения.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_is_id_boundaries_are_not_tightened",
+      "raw_log": "raw_logs/clean_run_1/candidate.stderr; raw_logs/clean_run_2/candidate.stderr",
+      "result": "PASS"
+    },
+    {
+      "requirement": "campaign_id — точная str в каноническом lowercase UUID. Иначе INVALID_CAMPAIGN_ID до часов и сервиса. Подкласс str, верхний регистр, URN, скобки и нестроковые типы отвергаются. Нестандартный, но канонический UUID доходит до реального сервиса.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_campaign_id_rejected_before_clock_and_service; candidate_tests/test_catalog_config.py::test_canonical_uuid_reaches_real_service_without_version_tightening; checks/test_acceptance.py::test_invalid_campaign_before_clock_service",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Порядок вызова: проверка id, scope ровно из закреплённых client_id и campaign_id, один clock(), один trusted_raw_config через публичный модуль.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_call_order_exact_scope_and_single_dependency_calls; checks/test_acceptance.py::test_consumer_called_once_with_pins",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Версия закреплена за экземпляром. Другая версия требует новый resolver. Отсутствующая версия даёт NOT_FOUND и не подменяется текущей.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_version_is_pinned_and_missing_version_has_no_fallback; checks/test_acceptance.py::test_missing_version_not_fallback",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Результат часов — точный aware datetime. Наивный datetime, подкласс datetime и чужой тип дают INVALID_CLOCK без вызова сервиса. Исключение самих часов проходит тем же объектом.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_naive_and_wrong_clock_do_not_call_service; candidate_tests/test_catalog_config.py::test_clock_exception_is_the_same_object; checks/test_acceptance.py::test_naive_clock_zero_service",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Чужой клиент, отсутствие authentication и отсутствие capability отклоняет существующий сервис. Адаптер не добавляет прав.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_foreign_client_is_refused; candidate_tests/test_catalog_config.py::test_missing_authentication_is_refused; candidate_tests/test_catalog_config.py::test_missing_capability_is_not_added; checks/test_acceptance.py::test_wrong_scope_refused_by_real_service; checks/test_acceptance.py::test_missing_capability_not_upgraded",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Успешное чтение не кэшируется: смена прав, revoke и expiry видны при следующем чтении. Повторный успех снова проходит через зависимости.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_capability_change_after_success_is_visible; candidate_tests/test_catalog_config.py::test_revoke_after_success_is_not_cached; candidate_tests/test_catalog_config.py::test_expiry_after_success_is_not_cached; candidate_tests/test_catalog_config.py::test_repeat_read_uses_dependencies_again; checks/test_acceptance.py::test_revocation_after_success_is_not_cached; checks/test_acceptance.py::test_expiry_clock_changes; checks/test_acceptance.py::test_return_independent_each_call",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Исключение consumer передаётся тем же объектом. Возвращается независимый deepcopy только raw_config. Входы, service._ports.now и повторный scope не портятся.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_consumer_exception_is_the_same_object; candidate_tests/test_catalog_config.py::test_results_are_deep_independent_and_inputs_stay_unchanged; candidate_tests/test_catalog_config.py::test_fresh_scope_after_a_consumer_mutates_the_previous_one; checks/test_acceptance.py::test_exception_object_passes_unchanged",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout; raw_logs/clean_run_1/acceptance.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Конфигурация не читается из campaign/task payload. Новых разрешений, прямого I/O и вызова системных часов в модуле нет.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "candidate_tests/test_catalog_config.py::test_real_catalog_consumer_f128_positive; candidate_tests/test_catalog_config.py::test_no_added_authority_io_or_system_clock; candidate_tests/test_catalog_config.py::test_module_stays_on_public_imports_and_namespace_package",
+      "raw_log": "raw_logs/clean_run_1/candidate.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Все 90 защищённых файлов совпадают с PROTECTED_SHA256.json до тестов и после них. Базовые 186 тестов остаются зелёными.",
+      "code": "PROTECTED_SHA256.json",
+      "test": "python -B RUN_CHECKS.py integrity; python -B RUN_CHECKS.py baseline",
+      "raw_log": "raw_logs/clean_run_1/integrity.stdout; raw_logs/clean_run_1/integrity_after.stdout; raw_logs/clean_run_1/baseline.stdout; raw_logs/clean_run_2/integrity.stdout; raw_logs/clean_run_2/integrity_after.stdout; raw_logs/clean_run_2/baseline.stdout",
+      "result": "PASS"
+    },
+    {
+      "requirement": "Native macOS component run.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "not executed",
+      "raw_log": "raw_logs/RETURN_REPORT.md",
+      "result": "NOT_RUN",
+      "reason": "Проверки выполнены на Windows 11, Python 3.12.8. Отдельной машины macOS в этом задании не было."
+    },
+    {
+      "requirement": "PostgreSQL и installed/connected acceptance.",
+      "code": "source/first_materials_integration/catalog_config.py",
+      "test": "not executed",
+      "raw_log": "raw_logs/RETURN_REPORT.md",
+      "result": "NOT_RUN",
+      "reason": "Задание запрещает SQL, production-установку, credentials и системную конфигурацию. Подключение остаётся следующему интегратору."
+    },
+    {
+      "requirement": "Исторические B8 CP2/CP3/CP4 и downstream F1-29, F1-22, P08, P43.",
+      "code": "не этот адаптер",
+      "test": "not executed",
+      "raw_log": "raw_logs/INTEGRATION_PROPOSAL.md",
+      "result": "NOT_IN_SCOPE",
+      "reason": "Их нельзя переносить в объём этого read-only адаптера и нельзя объявлять выполненными."
+    }
+  ]
+}
