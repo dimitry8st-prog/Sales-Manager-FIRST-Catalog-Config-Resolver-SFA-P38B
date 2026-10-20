@@ -1,0 +1,4 @@
+$ python3 RUN_CHECKS.py acceptance
+MISSING_IMPLEMENTATION: source/first_materials_integration/catalog_config.py
+
+EXIT=3

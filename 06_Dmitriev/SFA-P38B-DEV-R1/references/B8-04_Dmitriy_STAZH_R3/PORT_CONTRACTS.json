@@ -1,0 +1,566 @@
+{
+  "catalog.bundle": {
+    "request": {
+      "scope": "CatalogScope",
+      "bundle_ref": "id"
+    },
+    "response": "ApprovedBundle (PORT_MAPPING_R2.md plus raw F105/F106 by immutable refs)",
+    "owner": "B8-01 approved publication source adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "catalog.resolve": {
+    "request": {
+      "scope": "CatalogScope|LeadScope|InitialScope",
+      "version": "id"
+    },
+    "response": {
+      "version": "id",
+      "bundle_ref": "id",
+      "approved": "bool"
+    },
+    "owner": "B8-01 own resolver; raw frozen F105 through resolve_config adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "authority.enumerate": {
+    "request": {
+      "scope": "CatalogScope"
+    },
+    "response": {
+      "complete": "bool",
+      "scopes": "list[LeadScope|InitialScope]",
+      "catalog_revision": "rev"
+    },
+    "owner": "integrator sole authority writer/read adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "authority.invalidate": {
+    "request": {
+      "scope": "CatalogScope",
+      "expected_revision": "rev",
+      "scopes": "list[LeadScope|InitialScope]",
+      "reason": "id"
+    },
+    "response": {
+      "revision": "rev",
+      "invalidated": "int"
+    },
+    "owner": "integrator atomic multi-scope invalidator",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "worker.claim": {
+    "request": {
+      "scope": "WorkerScope",
+      "task_id": "id",
+      "expected_revision": "rev"
+    },
+    "response": {
+      "task_id": "id",
+      "generation": "rev",
+      "expires_at": "timestamp"
+    },
+    "owner": "integrator atomic task+lease adapter over F116/F132",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f132.transition": {
+    "request": {
+      "scope": "WorkerScope",
+      "task_id": "id",
+      "generation": "rev",
+      "transition": "finish|fail|defer"
+    },
+    "response": {
+      "task_id": "id",
+      "generation": "rev",
+      "transition": "finish|fail|defer"
+    },
+    "owner": "first_owned_transition.run_owned_transition",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "inbox.event": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id",
+      "source_ref": "id"
+    },
+    "response": {
+      "event_id": "id",
+      "kind": "F103 Kind",
+      "body": "str",
+      "observed_at": "timestamp",
+      "source_revision": "rev",
+      "coverage_complete": "bool",
+      "source_hash": "sha256",
+      "approved_fact_ids": "list[id]",
+      "approved_template_id": "id|null"
+    },
+    "owner": "integrator authenticated F117 producer codec",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f117.correlate": {
+    "request": {
+      "scope": "LeadScope",
+      "event": "InboxEvent"
+    },
+    "response": {
+      "scope": "LeadScope",
+      "matched": "bool"
+    },
+    "owner": "existing F117 accepted bytes; adapter, no replacement",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "d1.append": {
+    "request": {
+      "scope": "LeadScope",
+      "event": "InboxEvent",
+      "expected_revision": "rev"
+    },
+    "response": {
+      "revision": "rev",
+      "duplicate": "bool"
+    },
+    "owner": "D1 HistoryRepository.append_history; raw event->message codec in PORT_MAPPING_R2.md",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "dialogue.reduce": {
+    "request": {
+      "scope": "LeadScope",
+      "event": "InboxEvent",
+      "revision": "rev"
+    },
+    "response": {
+      "action": "F103 Action",
+      "revision": "rev"
+    },
+    "owner": "integrator adapter to exact F103 decide_next_action, mode gate",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "authority.stop": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id"
+    },
+    "response": {
+      "status": "STOPPED"
+    },
+    "owner": "integrator atomic enumeration all known same client+campaign+lead scopes, cancellation; no foreign tenant",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "materials.propose": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id"
+    },
+    "response": {
+      "material_ref": "id"
+    },
+    "owner": "B8-04 prepare adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "d1.event": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id"
+    },
+    "response": "InboxEvent",
+    "owner": "D1 preserved event read adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f129.materialize": {
+    "request": {
+      "scope": "LeadScope",
+      "event": "InboxEvent",
+      "catalog_version": "id",
+      "kind": "PRODUCT_INFO|PRESENTATION"
+    },
+    "response": {
+      "material_ref": "id",
+      "sha256": "sha256",
+      "approved_fact_ids": "list[id]"
+    },
+    "owner": "existing F129 current assignee plus accepted F130; do not replace",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "materials.save": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "request_id": "id",
+      "material": "Material"
+    },
+    "response": {
+      "material_ref": "id"
+    },
+    "owner": "integrator immutable materials store adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "dispatch.propose": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "kind": "INITIAL_OUTREACH|PRODUCT_INFO|PRESENTATION|FOLLOWUP",
+      "payload_ref": "id"
+    },
+    "response": {
+      "action_id": "id",
+      "state": "PREPARED"
+    },
+    "owner": "B8-07 same F115 owner; F114 kind map in docs",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "d1.capture": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id"
+    },
+    "response": {
+      "complete": "bool",
+      "snapshot_ref": "id",
+      "revision": "rev"
+    },
+    "owner": "D1 SnapshotRepository.load_or_capture(scope,trigger_ref)",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f109.assemble": {
+    "request": {
+      "scope": "LeadScope",
+      "snapshot_ref": "id"
+    },
+    "response": {
+      "context_ref": "id"
+    },
+    "owner": "sales_first_handoff.assemble_handoff_context exact context from snapshot",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f119.intent": {
+    "request": {
+      "scope": "LeadScope",
+      "context_ref": "id"
+    },
+    "response": {
+      "intent_ref": "id"
+    },
+    "owner": "existing F119 handoff intent builder",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "handoff.prepare": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id",
+      "expected_revision": "rev",
+      "intent_ref": "id"
+    },
+    "response": {
+      "handoff_id": "id",
+      "state": "PREPARED"
+    },
+    "owner": "integrator atomic F115 prepare + HUMAN + cancellation, one tx",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "dialogue.followup": {
+    "request": {
+      "scope": "LeadScope",
+      "schedule": "Schedule"
+    },
+    "response": {
+      "action": "F103 Action",
+      "proposal": "null unless PROPOSE_FOLLOWUP; otherwise {action_id:id,payload_ref:id}"
+    },
+    "owner": "R3 trusted existing F103 decision + F130/F114 approved immutable FOLLOWUP preparation adapter; no provider",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "dispatch.authorize": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id"
+    },
+    "response": {
+      "allowed": "bool",
+      "revision": "rev",
+      "catalog_version": "id"
+    },
+    "owner": "integrator authenticated source/authority/lease validator; revalidate inside gate",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f115.read": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id"
+    },
+    "response": "ExistingAction",
+    "owner": "F115 current assignee, absent implementation not recreated",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "provider.send": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "payload_ref": "id"
+    },
+    "response": {
+      "state": "ACCEPTED|DELIVERED|UNKNOWN",
+      "provider_message_id": "id|null"
+    },
+    "owner": "SYNTHETIC ONLY; NO_OUTBOUND",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "dispatch.record_initial": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "observation": "ProviderObservation"
+    },
+    "response": {
+      "state": "ACCEPTED|DELIVERED|UNKNOWN"
+    },
+    "owner": "integrator F115 owned initial result atomic adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "archive.evidence": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "provider_event_id": "id",
+      "evidence_ref": "id"
+    },
+    "response": {
+      "action_id": "id",
+      "provider_event_id": "id",
+      "state": "ACCEPTED|DELIVERED|FAILED|UNKNOWN",
+      "scope": "LeadScope|InitialScope (original immutable action scope)",
+      "sha256": "sha256"
+    },
+    "owner": "authenticated immutable evidence archive adapter; original F120 bytes by ref",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f115.late_record": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "provider_event_id": "id",
+      "evidence": "Evidence",
+      "current_revision": "rev"
+    },
+    "response": {
+      "action_id": "id",
+      "state": "ACCEPTED|DELIVERED|FAILED|UNKNOWN"
+    },
+    "owner": "EXPLICIT future separately versioned evidence-only F115-owner addendum, no resend",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "migrations.inspect": {
+    "request": {
+      "scope": "DatabaseScope",
+      "mode": "RECOVER_OR_ISOLATED"
+    },
+    "response": {
+      "original_found": "bool",
+      "complete": "bool",
+      "modules": "list[MigrationIdentity]",
+      "original_lineage": "id|null"
+    },
+    "owner": "B8-08 inspected exact source migrations",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "migrations.apply": {
+    "request": {
+      "scope": "DatabaseScope",
+      "plan_hash": "sha256",
+      "target": "IsolatedTarget"
+    },
+    "response": {
+      "lineage": "id",
+      "plan_hash": "sha256",
+      "ready": "bool"
+    },
+    "owner": "integrator approved isolated DB migration adapter",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "dispatch.begin": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "expected_revision": "rev"
+    },
+    "response": {
+      "action_id": "id",
+      "state": "INVOKING",
+      "attempt": "rev"
+    },
+    "owner": "integrator SAME-F115-owner atomic at-most-once attempt-start facade, no replacement journal",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f129.qualify": {
+    "request": {
+      "scope": "InitialScope",
+      "candidate_ref": "id",
+      "assessment_ref": "id",
+      "catalog_version": "id"
+    },
+    "response": {
+      "verdict": "QUALIFIED_FOR_PREPARATION|NOT_QUALIFIED|NEEDS_REVIEW",
+      "qualification_ref": "id",
+      "reason_codes": "list[str]"
+    },
+    "owner": "existing sales_discovery_qualification.qualify_candidate exact raw inputs by trusted refs",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f130.materialize_initial": {
+    "request": {
+      "scope": "InitialScope",
+      "qualification_ref": "id",
+      "catalog_version": "id"
+    },
+    "response": {
+      "material_ref": "id",
+      "sha256": "sha256",
+      "approved_fact_ids": "list[id]"
+    },
+    "owner": "existing sales_runtime_materialization.prepare_bound_materials exact pinned raw registry/binding",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "f115.prepare": {
+    "request": {
+      "scope": "LeadScope|InitialScope",
+      "action_id": "id",
+      "kind": "SEND|REPLY|FOLLOWUP|HANDOFF",
+      "payload_ref": "id",
+      "expected_revision": "rev"
+    },
+    "response": {
+      "action_id": "id",
+      "state": "PREPARED"
+    },
+    "owner": "existing SAME-F115-owner atomic immutable prepare facade; original F114 validated intent by trusted payload ref; no new journal implementation",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "worker.renew": {
+    "request": {
+      "scope": "WorkerScope",
+      "task_id": "id",
+      "generation": "rev"
+    },
+    "response": {
+      "task_id": "id",
+      "generation": "rev",
+      "expires_at": "timestamp"
+    },
+    "owner": "same authenticated F116 lease owner renew facade; owner token private server lease transport, no own task authority",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "schedule.basis": {
+    "request": {
+      "scope": "LeadScope",
+      "policy_version": "id",
+      "source_action_id": "id"
+    },
+    "response": {
+      "policy_version": "id",
+      "source_action_id": "id",
+      "source_state": "DELIVERED|ACCEPTED",
+      "last_outbound_at": "timestamp",
+      "max_followups": "rev",
+      "cooldown_seconds": "rev",
+      "followups_sent": "rev"
+    },
+    "owner": "trusted existing F103 state/policy and confirmed original receipt projection; no new scheduling policy",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "handoff.propose": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id",
+      "expected_revision": "rev"
+    },
+    "response": {
+      "handoff_id": "id",
+      "state": "PREPARED"
+    },
+    "owner": "B8-05 service facade; derives validated context then invokes atomic handoff.prepare, no inbox fabrication of intent_ref",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  },
+  "quarantine.record": {
+    "request": {
+      "scope": "LeadScope",
+      "event_id": "id",
+      "reason": "UNKNOWN_EVENT|V1_OBJECTION"
+    },
+    "response": {
+      "ticket_ref": "id"
+    },
+    "owner": "existing F124 quarantine ticket builder/store adapter, no customer message",
+    "missing": "DEPENDENCY_UNAVAILABLE",
+    "exceptions": "rollback; UNKNOWN only on uncertain committed effect",
+    "auth": "authenticated server ports principal; exact scope/capability; never request trust"
+  }
+}

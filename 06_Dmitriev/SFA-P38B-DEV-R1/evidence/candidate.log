@@ -1,0 +1,4 @@
+$ python3 RUN_CHECKS.py candidate
+MISSING_CANDIDATE_TESTS
+
+EXIT=4

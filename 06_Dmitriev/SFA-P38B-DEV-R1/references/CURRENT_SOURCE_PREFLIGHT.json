@@ -1,0 +1,9 @@
+{
+  "observed_at_utc": "2026-10-19T10:34:30.2590866Z",
+  "exact_source_files": 28,
+  "all_source_hashes_match": true,
+  "new_path_absent": "first_materials_integration/catalog_config.py",
+  "current_source_manifest_sha256": "27fc43efb714c7b8a53d53620bbb39eb25f1c971dd4d99ac977f3909a531d39d",
+  "full_noncache_file_count": 589,
+  "installed_product_readiness": "NOT_VERIFIED"
+}

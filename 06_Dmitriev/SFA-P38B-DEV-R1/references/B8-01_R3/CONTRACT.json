@@ -1,0 +1,68 @@
+{
+  "id": "B8-01",
+  "revision": "R3",
+  "status": "READY_TO_DEVELOP",
+  "candidate": "Владимир New",
+  "module": "first_campaign_catalog",
+  "scope_fields": [
+    "client_id",
+    "campaign_id"
+  ],
+  "scope_semantics": "See SHARED_CONTRACT_R3.md and CATALOG_R3_SPEC.md",
+  "operations": {
+    "publish": {
+      "version": "id",
+      "expected_revision": "rev",
+      "bundle_ref": "id"
+    },
+    "resolve": {
+      "version": "id"
+    },
+    "revoke": {
+      "version": "id",
+      "expected_revision": "rev"
+    }
+  },
+  "dependency_ports": [
+    "catalog.bundle",
+    "authority.enumerate",
+    "authority.invalidate"
+  ],
+  "capabilities": {
+    "publish": "catalog.publish",
+    "resolve": "catalog.read",
+    "revoke": "catalog.publish"
+  },
+  "abi": "create_service(ports).execute(operation,request)->{status,data}",
+  "details": "Normative exact behavior/DTO/storage/error/adapter: CATALOG_R3_SPEC.md; shared ownership: SHARED_CONTRACT_R3.md. Trusted catalog.bundle uses ApprovedBundle_R3 complete base64 raw F105/F106/pack blobs and hashes; PROVIDED tooling validates original sources. Candidate implements service/auth/CAS/immutable persistence/revocation/atomic invalidation and tests only. Existing consumer catalog.resolve response remains {version,bundle_ref,approved} through PROVIDED pure projection adapter.",
+  "own_paths": [
+    "solution/first_campaign_catalog/**",
+    "tests/first_campaign_catalog/**",
+    "integration_proposal/B8-01.patch",
+    "return/**"
+  ],
+  "migration_reservation": {
+    "id": "b8r2.01.0001",
+    "path": "solution/first_campaign_catalog/migrations/0001.sql",
+    "kind": "RESERVED_PROPOSAL_ONLY",
+    "sql_owner": "first_campaign_catalog",
+    "aggregate_merge_owner": "central integrator",
+    "no_shared_serial": true,
+    "note": "Existing module reservation retained from R2; not a revision identifier and not automatic install approval."
+  },
+  "reference_base": "registry v164/source549 manifest snapshot, NOT current installation claim",
+  "prerequisites_for_integration": [
+    "R3 каталог/ABI заморожены; реальный authenticated publisher principal и source mapping нужны только перед activation.",
+    "Установка: принятые B8-08 module migrations, sole-authority multi-scope invalidation adapter; D2 grandfather proposal заменён R2 STOP gate."
+  ],
+  "implementation_status": "NOT_IMPLEMENTED",
+  "no_outbound": true,
+  "provided_paths": [
+    "tooling/**",
+    "acceptance/**",
+    "reference_source/**",
+    "reference_d1/**",
+    "reference_contracts/**"
+  ],
+  "normative_spec": "CATALOG_R3_SPEC.md"
+}

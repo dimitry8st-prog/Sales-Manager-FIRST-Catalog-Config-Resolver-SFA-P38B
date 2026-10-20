@@ -1,0 +1,145 @@
+{
+  "project_id": "sales-manager-first",
+  "task_id": "F1-22",
+  "revision": "R1",
+  "status": "PREPARED_PENDING_INDEPENDENT_AUDIT",
+  "assignee": null,
+  "signature": "materialize_bound_template(loaded_registry:dict, bound_language:dict, *, template_id:str)->dict",
+  "error_class": "TemplateMaterializationError(ValueError); .code:str; str(exc)==code only; catches accepted F106 errors and raises same code without input/body/token/SQL content",
+  "stages": [
+    {
+      "stage": 1,
+      "rule": "type(loaded_registry) is dict and type(bound_language) is dict; otherwise INVALID_INPUT. No other field inspected."
+    },
+    {
+      "stage": 2,
+      "rule": "bound exact keys schema_version,status,locale,language_pack_version,registry_version,approved_template,approved_fact_ids; schema_version FIRST_ACTION_LANGUAGE_V1; status BOUND; locale/versions exact builtin str. Otherwise INVALID_SCHEMA. template/facts content deferred to stage5."
+    },
+    {
+      "stage": 3,
+      "rule": "template_id, bound.language_pack_version, bound.registry_version exact builtin str fullmatch [A-Za-z0-9][A-Za-z0-9_.:-]{0,127}. Check in that order. Otherwise INVALID_IDENTIFIER."
+    },
+    {
+      "stage": 4,
+      "rule": "Invoke actual F106 build_policy_language_fields(loaded_registry,locale=bound.locale); preserve F106 .code through own exception. Revalidate ALL packs; locale validation/active check belongs actual F106. No duplicate business validation before this call. После успешного actual F106 вызова запретить builtin subclasses в loaded tree: container dict/list и scalar str обязаны иметь exact type. Несоответствие approved_fact_ids => INVALID_FACT_SET; active/default locale => INVALID_LOCALE; versions/template IDs => INVALID_IDENTIFIER; template kind/subject/body/fact_ids => INVALID_TEMPLATE; template locale => TEMPLATE_LOCALE_MISMATCH; остальные container/schema нарушения => INVALID_SCHEMA. Обход в порядке accepted F106: facts, schema, identifiers, locales, active-order packs, template insertion-order. Все реальные F106 ошибки всегда раньше этой strict-success проверки."
+    },
+    {
+      "stage": 5,
+      "rule": "Create ephemeral pack {schema_version:FIRST_LANGUAGE_PACK_V1,locale:bound.locale,version:bound.language_pack_version,templates:{template_id:bound.approved_template}}; call actual F106 validate_language_pack(pack,approved_fact_ids=bound.approved_fact_ids) FIRST. Any actual F106 error immediately re-raised as TemplateMaterializationError with exact unchanged .code. Only after successful F106 call perform additional strict-builtin checks sequentially: approved_fact_ids type is list and every item type is str -> INVALID_FACT_SET; approved_template type is dict and exact five fields -> INVALID_SCHEMA; kind type is str -> INVALID_TEMPLATE; template locale type is str -> TEMPLATE_LOCALE_MISMATCH; subject type is str -> INVALID_TEMPLATE; body type is str -> INVALID_TEMPLATE; fact_ids type is list and each item type is str -> INVALID_TEMPLATE. Thus builtin subclasses accepted by legacy F106 are rejected here without replacing or reordering actual F106 errors. No F106 private function import or duplicate validator."
+    },
+    {
+      "stage": 6,
+      "rule": "selected pack=loaded.packs_by_locale[bound.locale]. bound.language_pack_version must equal BOTH loaded.language_pack_versions[locale] and selected.version; else PACK_VERSION_CHANGED."
+    },
+    {
+      "stage": 7,
+      "rule": "bound.registry_version == loaded.registry_version else REGISTRY_VERSION_CHANGED."
+    },
+    {
+      "stage": 8,
+      "rule": "template_id present in selected.templates else TEMPLATE_NOT_FOUND."
+    },
+    {
+      "stage": 9,
+      "rule": "selected.templates[template_id] == bound.approved_template deep exact equality (including list order and literal whitespace), else TEMPLATE_CONTENT_MISMATCH."
+    },
+    {
+      "stage": 10,
+      "rule": "bound approved_fact_ids subset loaded approved_fact_ids else FACT_SCOPE_MISMATCH. Template fact subset of bound already checked at stage5, failure code UNAPPROVED_FACT. This removes ambiguity; no remapping of F106 codes."
+    },
+    {
+      "stage": 11,
+      "rule": "Return exactly nine fields from result contract; deepcopy mutable fact_ids; all inputs unchanged; no shared mutable output references."
+    }
+  ],
+  "result_exact": {
+    "schema_version": "FIRST_TEMPLATE_MATERIALS_V1",
+    "locale": "exact input locale",
+    "language_pack_version": "exact input version",
+    "registry_version": "exact input registry_version",
+    "kind": "exact approved_template.kind",
+    "subject": "byte-for-byte Unicode literal approved_template.subject",
+    "body": "byte-for-byte Unicode literal approved_template.body",
+    "fact_ids": "deepcopied approved_template.fact_ids",
+    "template_id": "exact validated template_id; exact registry pack/templates relationship proven"
+  },
+  "loaded_fieldsets": {
+    "loaded_registry": [
+      "schema_version",
+      "registry_version",
+      "default_locale",
+      "active_locales",
+      "language_pack_versions",
+      "approved_fact_ids",
+      "packs_by_locale"
+    ],
+    "pack": [
+      "schema_version",
+      "locale",
+      "version",
+      "templates"
+    ],
+    "template": [
+      "kind",
+      "locale",
+      "subject",
+      "body",
+      "fact_ids"
+    ],
+    "bound_language": [
+      "schema_version",
+      "status",
+      "locale",
+      "language_pack_version",
+      "registry_version",
+      "approved_template",
+      "approved_fact_ids"
+    ]
+  },
+  "accepted_imports": [
+    "sales_language_registry.build_policy_language_fields",
+    "sales_language_registry.validate_language_pack",
+    "sales_language_registry.LanguageRegistryError"
+  ],
+  "allowlist": [
+    "source/sales_template_materialization.py",
+    "source/tests/wave4/test_f122.py",
+    "source/tests/fixtures/wave4/f122/*.json",
+    "docs/F1-22_IMPLEMENTATION.md"
+  ],
+  "rules": [
+    "No formatting, variables, interpolation, eval, markup interpretation or translation. Body commands and braces remain literal text. No product-specific core. Preserve Unicode, names, links, line breaks, whitespace, fact-list ordering and duplicates policy enforced F106.",
+    "Do not manufacture QA success flags, external_effect_authorized, release mode or owner approval. Literal static materialization does not establish personalization, grammar quality, or contact/materials QA. No template or locale selection here: F120 remains sole bound-template selection owner.",
+    "Fixture packs en-GB and ru-RU include INITIAL,QUESTION,OBJECTION,FOLLOWUP,HANDOFF. Exact accepted F106 schema and paired semantics; explicit synthetic no real product promises, no invented facts. Initial subject nonempty; other subjects may be empty. Use no placeholders that require interpretation. Include de-DE synthetic single-template fixture to show generic core, no live language support claim.",
+    "Load each full EN/RU fixture pack through real F106 API, obtain selected exact template and construct frozen F120 fixture output. Five kinds x two locales positive materialization cases. Runtime pack publication/real product-specific approved wording remains separate pilot setup/integration work."
+  ],
+  "acceptance": [
+    "all5 kinds xEN/RU literal preservation",
+    "real F106 loads EN/RU five-kind fixture packs",
+    "third locale without core changes",
+    "subject empty allowed only nonINITIAL",
+    "unknown kind/fact rejected actual F106",
+    "wrong template locale rejected",
+    "exact keysets reject QA/grant extras",
+    "newlines/braces/command text literal no interpolation",
+    "input/output independent deepcopies",
+    "output no QA/sending permission flags",
+    "deterministic identical outputs noIO",
+    "accepted F106 regressions separately + own golden output",
+    "template_id points to different equal-kind but different body => TEMPLATE_CONTENT_MISMATCH",
+    "loaded pack version changed=>PACK_VERSION_CHANGED",
+    "loaded registry_version changed=>REGISTRY_VERSION_CHANGED",
+    "bound template differs in fact-list order or whitespace => TEMPLATE_CONTENT_MISMATCH",
+    "unapproved bound facts fail",
+    "all loaded packs revalidated even selected locale valid"
+  ],
+  "integration": "F120 bound template + trusted actually loaded F106 registry + retained selected template_id -> F122 validates identical pinned source and materializes literal text -> integrator maps subject/body into exact F114 payload. No repeat F105 binding decision or now checks. HANDOFF text never replaces F119/F109 full context. Current preparation QA/fact/source gates remain required. No sales_preparation_contract edit; ru-RU whitelist mismatch remains R07 integrator obligation.",
+  "exclusions": [
+    "No existing registry/F120/F114/Camel source edits",
+    "No NLP classifier/reducer/LLM generation",
+    "No literal commercial claims without future approved product facts",
+    "No provider/live/state writes",
+    "No pack publication or claim bilingual sales quality verified"
+  ],
+  "error_precedence_note": "Stage5 before business version/template/fact comparisons; unknown template facts preserve UNAPPROVED_FACT. Stage10 FACT_SCOPE_MISMATCH refers to valid bound approved facts outside loaded set."
+}

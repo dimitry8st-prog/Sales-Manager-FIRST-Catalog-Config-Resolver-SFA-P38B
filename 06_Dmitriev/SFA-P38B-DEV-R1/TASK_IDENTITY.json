@@ -1,0 +1,22 @@
+{
+  "project_id": "sales-manager-first",
+  "task_id": "SFA-P38B-DEV-R1",
+  "parent_package": "SFA-P38",
+  "revision": "R1",
+  "assignee": null,
+  "issued": false,
+  "started": false,
+  "boundary": "CATALOG_TO_F128_COMPONENT_ONLY",
+  "status": "ENGINEER_PREPARED_PENDING_INDEPENDENT_REVIEW",
+  "allowed_product_file": "first_materials_integration/catalog_config.py",
+  "source_base": "CP04 exact reference extraction; source hashes rechecked against CP10 2026-10-19 SOURCE readback",
+  "audit_source_identity": "44c19dd7f8edec01d9d8c3d44b4eceba984526fce261fa95d96de8b10ea4ce9d",
+  "registry_version_observed": 253,
+  "registry_sha256": "0c19ea81f1ed90e42c636a7d59dbc43e7f0c3300b261a52b48cc5bd589d68a5d",
+  "source_reference_status": "ACCEPTED COMPONENT REFERENCES; not actual deployed complete system",
+  "production_install_authorized": false,
+  "exact_subset_source_identity": "42f00b9beda300b2b547a8b7717769410a7e9377787ae556dc2af34dd215c991",
+  "packaging_revision": "H2-AUDIT-FIX1",
+  "technical_revision_unchanged": "R1",
+  "packaging_provenance": "PACKAGING_H2.md; AUDIT_FIX_20261020.md"
+}

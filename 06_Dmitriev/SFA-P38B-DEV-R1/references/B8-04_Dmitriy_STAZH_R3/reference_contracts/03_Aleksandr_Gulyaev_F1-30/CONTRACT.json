@@ -1,0 +1,36 @@
+{
+  "task_id": "F1-30",
+  "candidate": "Александр Гуляев",
+  "module": "src/sales_runtime_materialization.py",
+  "abi": "prepare_bound_materials(loaded_registry, binding_config, *, now, locale, required_template_id, pinned_pack_version, save_materials)",
+  "sequence": [
+    "bind_action_locale(loaded_registry,binding_config,now=now,locale=locale,required_template_id=required_template_id,pinned_pack_version=pinned_pack_version)",
+    "materialize_bound_template(loaded_registry,bound_language,template_id=required_template_id)",
+    "sales_rules.validate_materials(materials) on exact F122 dictionary before any save callback",
+    "save_materials(materials) exactly once",
+    "return callback result unchanged"
+  ],
+  "mutation": "No input changes; exact F122 result passed as sole callback positional argument, no merge or rewrite",
+  "errors": "F120/F122/consumer RuleViolation/callback exceptions propagate unchanged, same instance, no callback on validation rejection",
+  "trusted_inputs": "Registry and raw binding_config resolved server-side; caller supplies explicit aware now; task payload never source of approval",
+  "write_allowlist": [
+    "src/sales_runtime_materialization.py",
+    "tests/test_candidate_*.py",
+    "fixtures/candidate_*",
+    "docs/IMPLEMENTATION.md",
+    "return/**"
+  ],
+  "forbidden": [
+    "shared source edits",
+    "I/O except injected save callback",
+    "SEND_READY",
+    "outbound permission",
+    "fallback to agent text"
+  ],
+  "project_id": "sales-manager-first",
+  "revision": "R2",
+  "stage": "PREPARED_NOT_ISSUED",
+  "external_effect_authorized": false,
+  "integration_performed": false,
+  "consumer_boundary": "Exact sales_rules.validate_materials is mandatory, no subject/body/facts rewrite or synthetic fallback. API unchanged; R2 normative behavior adds actual consumer validation."
+}

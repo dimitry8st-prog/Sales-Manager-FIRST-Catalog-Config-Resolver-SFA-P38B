@@ -1,0 +1,174 @@
+ТЕХНИЧЕСКОЕ ЗАДАНИЕ F1-05, РЕВИЗИЯ R1
+Исполнитель: Иван СТАЖЕР.
+Проект: sales-manager-first.
+Компонент: проверка серверной конфигурации первого продавца.
+
+1. ЧТО НУЖНО СДЕЛАТЬ
+
+Создать небольшой Python-модуль, который получает словарь конфигурации одной кампании FIRST, проверяет его и возвращает отдельную нормализованную копию. Некорректный ввод отклоняется предсказуемой ошибкой. Модуль ничего не отправляет, не читает сеть, окружение, файлы или базу данных и не меняет исходный словарь.
+
+FIRST работает с одним предложением и одним почтовым ящиком. Начальные языки пилота — английский и русский. Архитектура допускает дополнительные языки через конфигурацию и отдельно принятые языковые пакеты. Полной настройки продавца, запуска продаж или доказательства коммерческих фактов в этом задании нет.
+
+Это структурная проверка доверенной серверной конфигурации. Даже успешно проверенный словарь не доказывает согласие владельца, владение ящиком, достоверность фактов или право отправки. Эти доказательства и разрешения проверяются последующим интегратором. Поле owner_approval_ref — ссылка на доказательство, а не сама авторизация. Нельзя брать эту конфигурацию прямо из письма клиента или результата модели.
+
+2. БАЗА И РАЗРЕШЁННЫЕ ФАЙЛЫ
+
+В пакете находится исходный snapshot из 46 файлов и BASE_MANIFEST.json. Сначала проверить его по manifest. Архив исходной базы: SHA256 88a1bd4fb420046819fc4b69d4a47ae1583b8228045aedd65cce4ae10d93c29e. Хеш архива не заменяет проверку хешей распакованных файлов.
+
+Создать только следующие пути относительно source/:
+  sales_first_binding.py
+  tests/test_first_binding.py
+  tests/fixtures/first_binding/*.json
+
+Все исходные файлы, включая sales_contracts.py, sales_preparation_contract.py, sales_rules.py, sales_manager.py, sales_store.py, worker_prod.py, config/, migrations/, requirements.txt и Dockerfile, доступны только для чтения. Не менять код GSK, Annie, Camel или другого разработчика. Не добавлять зависимости, фреймворки, сервер или новую базу. Использовать только стандартную библиотеку Python 3.12.
+
+Для понимания текущей архитектуры прочитать sales_contracts.py: там уже есть серверное связывание runtime campaign UUID с внешней кампанией Make. Прочитать sales_preparation_contract.py: он использует эту границу. В этом задании существующие функции не заменяются и не вызываются из нового модуля. Конфигурация FIRST позднее будет подключена интегратором к этим механизмам.
+
+3. ТОЧНЫЙ ПУБЛИЧНЫЙ ИНТЕРФЕЙС
+
+В sales_first_binding.py объявить:
+
+  class FirstBindingError(ValueError):
+      # Экземпляр имеет строковое поле code.
+      # str(error) возвращает только этот code, без входных значений.
+
+  def validate_first_binding(config: dict, *, now: datetime) -> dict:
+      ...
+
+now передаётся вызывающей стороной явно. Функция не получает текущее время сама. now должен быть datetime с часовым поясом и определённым utcoffset. Naive datetime запрещён. Поддерживаются временные зоны, корректно преобразуемые в UTC.
+
+Никаких дополнительных публичных функций от других ещё не реализованных заданий не требуется. Внутренние вспомогательные функции допускаются.
+
+4. СХЕМА ВХОДА
+
+config — обычный dict со следующими обязательными полями и без неизвестных полей:
+
+schema_version: ровно "FIRST_BINDING_INPUT_V1".
+client_id: identifier.
+runtime_campaign_id: канонический UUID в нижнем регистре, строка вида 11111111-1111-4111-8111-111111111111.
+make_campaign_id: identifier. Это отдельный внешний идентификатор; не подменяет runtime_campaign_id.
+offer: dict ровно с полями offer_id:identifier, name:text, description:text.
+mailbox: dict ровно с полями mailbox_ref:identifier, sender_email:email.
+owner_approval_ref: text.
+binding_version: identifier.
+valid_from: timezone-aware ISO8601 строка.
+expires_at: timezone-aware ISO8601 строка.
+release_mode: ровно "NO_OUTBOUND".
+default_locale: locale_id.
+allowed_locales: непустой list уникальных locale_id.
+language_pack_versions: dict, ключи ровно совпадают с allowed_locales, каждое значение identifier.
+daily_send_limit: целое число >=1, bool запрещён.
+max_followups: целое число >=0, bool запрещён.
+approved_facts: непустой list словарей; каждый словарь ровно с полями fact_id:identifier, text:text, source_ref:text; fact_id уникальны.
+
+ОПРЕДЕЛЕНИЯ ТИПОВ:
+- identifier: строка, удовлетворяющая ASCII regex [A-Za-z0-9][A-Za-z0-9_.:-]{0,127}; пробелы не допускаются. Использовать fullmatch.
+- text: строка, после strip() не пустая. Возвращать её без изменения, включая исходные пробелы и Unicode; проверка пустоты не является нормализацией текста.
+- locale_id: строка длиной 1..64, regex [A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*; например en-GB, ru-RU, de-DE. Это локальный формат идентификатора, не реализация полного стандарта BCP47. Регистр сохранять; сравнение точное. Не ограничивать число языков двумя и не зашивать список разрешённых языков в Python enum.
+- email: непустая строка; нормализовать strip().lower(); результат должен соответствовать regex [^\s@]+@[^\s@]+\.[^\s@]+. Это только синтаксическая проверка, не deliverability/владение. Не проверять DNS, SMTP или Hunter.
+- ISO8601: разбирать datetime.fromisoformat после замены только конечного Z на +00:00; обязательны tzinfo и utcoffset. valid_from < expires_at и valid_from <= now < expires_at. Все сравнения по моменту времени, не по тексту.
+
+default_locale обязан входить в allowed_locales. Нельзя добавлять недостающие версии языков, язык по умолчанию или факты автоматически. FIRST fixture включает en-GB и ru-RU; функция при этом остаётся универсальной для другого принятого набора языков. Полную бизнес-приёмку начальных EN/RU проводит интегратор отдельно.
+
+5. ВЫХОД
+
+Вернуть независимую глубокую копию всех перечисленных полей, со следующими отличиями:
+- schema_version = "FIRST_BINDING_V1";
+- mailbox.sender_email нормализован как описано выше;
+- valid_from и expires_at приведены к UTC через isoformat(), суффикс +00:00;
+- добавлено approved_fact_ids: список fact_id в исходном порядке approved_facts.
+
+Не добавлять live_enabled, authenticated, verified, granted или подобные утверждения. release_mode остаётся NO_OUTBOUND. Ничего не записывать в окружение/сервер/Make. Не менять порядок языков или фактов. Изменение вложенного списка/словаря в результате не должно менять вход и наоборот.
+
+6. ОШИБКИ
+
+Всегда выдавать FirstBindingError с одним из кодов:
+INVALID_INPUT — config не dict или now неверного типа/без timezone;
+INVALID_SCHEMA — отсутствуют обязательные/есть неизвестные поля, schema_version не совпадает, вложенные offer/mailbox/fact имеют неверный набор полей;
+INVALID_IDENTITY — неверный identifier или runtime UUID, включая binding_version и fact_id;
+INVALID_OFFER — неверные name/description;
+INVALID_EMAIL — неверный тип/пустой/некорректный sender_email;
+INVALID_APPROVAL_REF — owner_approval_ref не text;
+INVALID_VALIDITY — неверная дата, порядок дат, ещё не действующая или истёкшая конфигурация;
+OUTBOUND_MODE_FORBIDDEN — release_mode не NO_OUTBOUND;
+INVALID_LANGUAGE_CONFIG — неверный locale/default/list/duplicates/keyset/версия языкового пакета;
+INVALID_LIMITS — неверные целочисленные лимиты;
+INVALID_FACTS — список фактов пустой/не list, повтор fact_id, неверные text/source_ref.
+
+При нескольких ошибках проверять группы в указанном порядке. INVALID_SCHEMA проверяет верхнюю схему сначала, вложенные схемы — при проверке соответствующей группы. Внутри одной группы порядок проверок на усмотрение автора, но он должен быть детерминированным. Для приёмки отдельные отрицательные fixtures содержат одну ошибку. Не допускать наружу случайный KeyError, TypeError, AttributeError или ValueError парсера для некорректного пользовательского входа. Не ловить BaseException и не скрывать ошибки программы общей успешной веткой.
+
+7. ПОЛНЫЙ ПОЛОЖИТЕЛЬНЫЙ ПРИМЕР
+
+now = datetime.fromisoformat("2026-10-12T10:00:00+00:00")
+config = {
+  "schema_version":"FIRST_BINDING_INPUT_V1",
+  "client_id":"client-test",
+  "runtime_campaign_id":"11111111-1111-4111-8111-111111111111",
+  "make_campaign_id":"make-campaign-test",
+  "offer":{"offer_id":"offer-test","name":"Synthetic offer","description":"Synthetic configuration example."},
+  "mailbox":{"mailbox_ref":"mb-test","sender_email":" Seller@Example.Test "},
+  "owner_approval_ref":"fixture:synthetic-not-live-approval",
+  "binding_version":"binding-v1",
+  "valid_from":"2026-10-12T09:00:00+00:00",
+  "expires_at":"2026-10-13T09:00:00+00:00",
+  "release_mode":"NO_OUTBOUND",
+  "default_locale":"en-GB",
+  "allowed_locales":["en-GB","ru-RU"],
+  "language_pack_versions":{"en-GB":"en-v1","ru-RU":"ru-v1"},
+  "daily_send_limit":2,
+  "max_followups":1,
+  "approved_facts":[{"fact_id":"fact-test","text":"Synthetic example only.","source_ref":"fixture:fact-test"}]
+}
+
+Результат имеет schema_version FIRST_BINDING_V1, sender_email seller@example.test, approved_fact_ids ["fact-test"]. Остальные значения сохраняются согласно разделу5. Этот пример не является реальными настройками кампании.
+
+Отрицательные примеры — каждый применяется к отдельной глубокой копии примера:
+- config["release_mode"] = "LIVE" -> OUTBOUND_MODE_FORBIDDEN.
+- config["daily_send_limit"] = True -> INVALID_LIMITS.
+- config["language_pack_versions"].pop("ru-RU") -> INVALID_LANGUAGE_CONFIG.
+- config["mailbox"]["sender_email"] = "   " -> INVALID_EMAIL.
+- config["expires_at"] = "2026-10-12T10:00:00+00:00" -> INVALID_VALIDITY.
+- config["runtime_campaign_id"] = "make-campaign-test" -> INVALID_IDENTITY.
+- config["approved_facts"].append(copy.deepcopy(config["approved_facts"][0])) -> INVALID_FACTS.
+- config["grant"] = True -> INVALID_SCHEMA.
+
+8. ОБЯЗАТЕЛЬНЫЕ ТЕСТЫ
+
+Использовать unittest. Проверить положительный пример, EN/RU и добавление synthetic de-DE с версией без изменения ядра; отсутствие/лишнее поле; UUID/внешний ID не смешиваются; bool вместо int; пустые и повреждённые вложенные структуры; timezone/UTC-смещения и обе границы периода; duplicate locale/fact; несовпадение keyset версий; Unicode; нормализацию email; независимость вложенных копий; вход остаётся неизменным; стабильные code без отражения секретного sentinel во всех ошибках. Повторный вызов с одинаковым now даёт равный результат. Модуль должен импортироваться без psycopg, credentials, сервера и сети.
+
+9. КАК РАБОТАТЬ И ПРОВЕРЯТЬ
+
+Из каталога source выполнить python3 --version. Нужен Python3.12. На Windows допустим эквивалент py -3.12; в отчёте указать фактическую команду. На macOS/Linux python3 — стандартный вариант, но не заявлять проверку macOS, если работа выполнялась на другой ОС.
+
+Команды из source:
+  python3 -m unittest discover -s tests -p test_first_binding.py -v
+  python3 -m py_compile sales_first_binding.py tests/test_first_binding.py
+
+Записать stdout/stderr и exitcode каждой команды. Если проверка не запускалась — NOT_RUN с причиной, а не PASS. Не устанавливать production credentials ради тестов. Проверить allowlist сравнением файлов с BASE_MANIFEST.json. Не менять исходный manifest; новые SHA256 включить в отдельный return manifest.
+
+Чекпойнты:
+TASK-CP0 — подтвердить базу/назначение/allowlist и отсутствие пересекающегося задания.
+TASK-CP1 — письменно перечислить интерфейс и тестовые случаи строго по этому ТЗ.
+TASK-CP2 — работающий модуль с собственными тестами; сообщить реальные проблемы без расширения задания.
+TASK-CP3 — полный возврат ZIP, READY_FOR_REVIEW, не ACCEPTED.
+Далее независимый reviewer проверяет; отдельный инженер интегрирует; конечная версия проходит отдельную приёмку. Автор не принимает свой результат сам.
+
+10. ЧТО ВЕРНУТЬ
+
+Один ZIP с одним корнем F1-05_RETURN_R1, внутри:
+- TASK_REPORT.md: task/project/исполнитель/return revision, точная база, выполненные пункты, ограничения, фактическая среда, изменённые пути, инструкция будущего подключения;
+- source/ — только новые разрешённые файлы, включая fixtures;
+- patch.diff — git-compatible patch добавления этих файлов относительно базы; проверить применение в отдельной чистой копии;
+- RETURN_MANIFEST.json — base archive SHA256, список каждого нового файла с SHA256, task_id F1-05 и return_revision;
+- TEST_RESULTS.md — критерий ТЗ -> тест/команда -> log -> exitcode -> PASS/FAIL/NOT_RUN;
+- logs/ — реальные сырые журналы команд;
+- LIMITATIONS.md — что не выполнено/не проверено и что остаётся интегратору.
+
+Не возвращать только ссылку на репозиторий или сообщение «всё готово». Не включать пароли, токены, окружение, venv, .git, __pycache__, данные клиентов. При неизвестном фактическом времени получения/начала/возврата отметить UNKNOWN, не придумывать дату. Координатор после каждого возврата и попытки интеграции формирует обязательный отчёт главного инженера о прогрессе, даже при изменении индекса0.
+
+11. КУДА ПОЙДЁТ КОМПОНЕНТ
+
+Интегратор получит проверенный серверный binding. Его mailbox/scope используются при сборке binding для Annie normalize_inbound; это разные schema_version, поэтому адаптер преобразует их явно. allowed_locales/language_pack_versions и approved_fact_ids согласуются с результатом F1-06 и затем входят в server-owned policy для Camel. Здесь не импортировать ещё не принятые компоненты и не писать этот адаптер. Вклад — FG01; сама структурная проверка не закрывает FG01, не подтверждает реальную почту и не разрешает отправку. Существующий NO_OUTBOUND сохраняется.
+
+ПРОВЕРКИ ИЗ КОРНЯ ПАКЕТА
+Перед реализацией и перед возвратом выполнить python3 CHECK_PACKAGE.py. Для проверки исходной регрессии выполнить python3 RUN_EXISTING_REGRESSION.py. Последний helper копирует только исходные46файлов во временный каталог; эта проверка не заменяет отдельный запуск новых тестов из source/, указанный выше. Сохранить реальные logs/exitcodes. Следовать приложенному руководству01 по Python/macOS; не менять системную конфигурацию и не утверждать проверку ОС без фактического запуска.

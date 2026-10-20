@@ -1,0 +1,142 @@
+[
+  {
+    "path": "first_campaign_catalog/__init__.py",
+    "sha256": "5fa7c4087a7ad88256098f528dde4e57569a6f828b0f2b8ba82c168602c98ba8",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/first_campaign_catalog/__init__.py"
+  },
+  {
+    "path": "first_campaign_catalog/api.py",
+    "sha256": "33c2ab871c8b30385169a991b2c7d1a058a698c0a18ef452568ab94ec9b597d2",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/first_campaign_catalog/api.py"
+  },
+  {
+    "path": "first_campaign_catalog/consumer.py",
+    "sha256": "897e48151d621d971f53b120874ef2add9fdc0437e8d1b37f8a47b46b241bafd",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/first_campaign_catalog/consumer.py"
+  },
+  {
+    "path": "sales_campaign_projection.py",
+    "sha256": "98d7f31518bd74011922a93c7fabcc49a757aaf6a9b9aac470dc8b4c9119dd36",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/sales_campaign_projection.py"
+  },
+  {
+    "path": "sales_discovery_qualification.py",
+    "sha256": "06a04ea22a95ec5b663c6e64a4813869d5bea3588a466e572a34990fa517d84d",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/sales_discovery_qualification.py"
+  },
+  {
+    "path": "sales_first_binding.py",
+    "sha256": "8bf357366230a0098e44ce69069dc5d0e29cf5af4da8a002c620e2e7d91cce7b",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/sales_first_binding.py"
+  },
+  {
+    "path": "sales_language_registry.py",
+    "sha256": "520ebace73a563232a2ebb0fa41c1af9588b50b5955952ca576256f3bbda38f0",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/sales_language_registry.py"
+  },
+  {
+    "path": "sales_runtime_binding.py",
+    "sha256": "d8fcf04d019968d0d9537748737ecb7210e7e9f34d939577318501d482126d5f",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/sales_runtime_binding.py"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_bool_limit.json",
+    "sha256": "85e2e8dfec71c78a077cb3fcbc4270c830b0a022140c88adc5f2cf99a18745b4",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_bool_limit.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_duplicate_fact.json",
+    "sha256": "5317f28db00f1c9789bfed537875b026f0fb2420e7d85d7a59bb9084b0126773",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_duplicate_fact.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_email.json",
+    "sha256": "c65971e87fea3a705817e1616a77f118383dc84559ce739771b6bb8b7ccd17e1",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_email.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_expired.json",
+    "sha256": "ad164f119670a566a737731bd2082ae68521dd2a0a4a65ce35f08bef4a3da2b8",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_expired.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_language_keyset.json",
+    "sha256": "8a3314cc96d42a6fde8cc0116273ab8688e0ee20a6e075f0b45347b1bed4154a",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_language_keyset.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_outbound_mode.json",
+    "sha256": "2942971792eaa5e9dba6f292640f27d2604634ae2105ce51f9dd69e60a9ea661",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_outbound_mode.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_runtime_id.json",
+    "sha256": "50539d4338fd17cff4a035ea2e2e8d3d8c38a467433b68f767f0190f7842ac35",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_runtime_id.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/negative_unknown_field.json",
+    "sha256": "17ebc19de3176ef57782090e689d94c25dfeafed43c5b60734b0f71979ab86fa",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/negative_unknown_field.json"
+  },
+  {
+    "path": "tests/fixtures/first_binding/positive_en_ru.json",
+    "sha256": "544c58276ac1f8b62cc0721b2f97f256e06d3d2e37bad01b81b1e08fa09f9865",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_binding/positive_en_ru.json"
+  },
+  {
+    "path": "tests/fixtures/first_discovery_qualification/positive_basic.json",
+    "sha256": "057658ef0a3241dcefedc11864985547aef8c1f9f12cf61d80bf6b1c52e6ecc0",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_discovery_qualification/positive_basic.json"
+  },
+  {
+    "path": "tests/fixtures/first_language_registry/pack_de_de.json",
+    "sha256": "563d02639511c27f8c73ad2ca5b8163e20759f2cddf7f4a77dfe03226aaa7290",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_language_registry/pack_de_de.json"
+  },
+  {
+    "path": "tests/fixtures/first_language_registry/pack_en_gb.json",
+    "sha256": "5228d40e2313fa44bf67f2f05caa97265714074cdca227d775414d67fdae51c0",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_language_registry/pack_en_gb.json"
+  },
+  {
+    "path": "tests/fixtures/first_language_registry/pack_ru_ru.json",
+    "sha256": "2313527c5a78193368d74e462ad3cc76b9f22757f1539ea479952811b6bae235",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_language_registry/pack_ru_ru.json"
+  },
+  {
+    "path": "tests/fixtures/first_language_registry/registry_en_ru.json",
+    "sha256": "1dd26894852bc086835e62a8317923f83c68db2fbc3a3e382beec217cea2d969",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_language_registry/registry_en_ru.json"
+  },
+  {
+    "path": "tests/fixtures/first_language_registry/registry_three_locales.json",
+    "sha256": "890c9e30e2010d8d44f0264f22d79f4df1d8ed55db01487a8f63cd83d0836a39",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/fixtures/first_language_registry/registry_three_locales.json"
+  },
+  {
+    "path": "tests/test_discovery_qualification.py",
+    "sha256": "12d2829bbe8bd3c64d20fad96f0d247dcca0059ab97f765b0ad9352e4bfc7a2d",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/test_discovery_qualification.py"
+  },
+  {
+    "path": "tests/test_first_binding.py",
+    "sha256": "56eee1d38a70bf9c8d271670edb84558c29f8e31d00dda0cc3683f44aeaa7731",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/test_first_binding.py"
+  },
+  {
+    "path": "tests/test_language_registry.py",
+    "sha256": "7a745e74b1ead1142c93a7e63da0013d54f8cb5be97c28646ffcaf10b7f57362",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tests/test_language_registry.py"
+  },
+  {
+    "path": "tooling/bundle_codec.py",
+    "sha256": "3496febb68c7b9a96e37cc9f568289166716ff6893653b08dbeee776771c89cb",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tooling/bundle_codec.py"
+  },
+  {
+    "path": "tooling/catalog_adapter.py",
+    "sha256": "a8e4031920b2db40deb014934e683c410905ec803ac49a0639a384c0ca9ea660",
+    "origin": "/workspace/scratch/440bc93cacdf/audit/Sales_First_Full_System_Audit/cp04/source/tooling/catalog_adapter.py"
+  }
+]

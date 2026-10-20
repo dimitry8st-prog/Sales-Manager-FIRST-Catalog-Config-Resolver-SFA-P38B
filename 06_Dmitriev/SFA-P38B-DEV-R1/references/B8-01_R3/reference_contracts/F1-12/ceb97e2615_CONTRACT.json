@@ -1,0 +1,101 @@
+{
+  "task_id": "F1-12",
+  "revision": "R1",
+  "assignee_label": "Иван СТАЖЕР",
+  "title": "Trusted campaign projection",
+  "allowed_paths": [
+    "source/sales_campaign_projection.py",
+    "source/tests/wave3/test_f112.py",
+    "source/tests/fixtures/wave3/f112/*.json"
+  ],
+  "contract_version": "FIRST_WAVE3_12_V1",
+  "module_api": [
+    {
+      "signature": "project_campaign_binding(config: dict, *, now: datetime) -> dict",
+      "input": "Raw exact F105 config schema; call validate_first_binding(config,now=now).",
+      "output": {
+        "schema_version": "FIRST_CAMPAIGN_PROJECTION_V1",
+        "client_id": "validated str",
+        "runtime_campaign_id": "validated UUID",
+        "make_campaign_id": "validated str",
+        "mailbox_ref": "validated.mailbox.mailbox_ref",
+        "sender_email": "validated.mailbox.sender_email",
+        "offer_id": "validated.offer.offer_id",
+        "binding_version": "validated str",
+        "owner_approval_ref": "validated str",
+        "valid_from": "UTC ISO",
+        "expires_at": "UTC ISO",
+        "release_mode": "NO_OUTBOUND",
+        "approved_fact_ids": "list[str]",
+        "default_locale": "str",
+        "allowed_locales": "list[str]",
+        "language_pack_versions": "dict[str,str]",
+        "daily_send_limit": "int >=1",
+        "max_followups": "int >=0"
+      },
+      "errors": [
+        "F105 FirstBindingError codes propagated",
+        "PROJECTION_SCOPE_INVALID"
+      ],
+      "statuses": [
+        "PROJECTED_NO_OUTBOUND"
+      ],
+      "error_precedence": [
+        "F105 FirstBindingError codes propagated",
+        "PROJECTION_SCOPE_INVALID"
+      ]
+    }
+  ],
+  "accepted_source_dependencies": [
+    "sales_first_binding.py"
+  ],
+  "owning_FG": [
+    "FG01",
+    "FG04"
+  ],
+  "integration_seam": {
+    "callsites": [
+      "sales_store.create_campaign",
+      "sales_store.get_campaign",
+      "sales_manager.process_discover",
+      "sales_manager.process_prepare"
+    ],
+    "integration_changes": "Integrator validates server-owned config and builds projection; adapter flattens nested accepted fields, never accepts projection from request body. Gate policy assembled by integrator."
+  },
+  "acceptance_vectors": [
+    "accepted config positive",
+    "expired binding",
+    "NO_OUTBOUND retained",
+    "mailbox/offer nested field mapping",
+    "deep copy and exact fields"
+  ],
+  "scope_exclusions": [
+    "Do not alter F105 validator",
+    "No new LIVE release_mode",
+    "No company fact approval or database writes"
+  ],
+  "gate_closure": "component acceptance does not automatically close FG",
+  "new_paths_only": true,
+  "error_precedence": {
+    "project_campaign_binding(config: dict, *, now: datetime) -> dict": [
+      "F105 FirstBindingError codes propagated",
+      "PROJECTION_SCOPE_INVALID"
+    ]
+  },
+  "design_status": "FROZEN_BOUND_INTERFACE",
+  "fixtures_path": "EXAMPLES.json",
+  "accepted_dependency_rule": "Only accepted SOURCE dependencies are production imports. Pending normalizer/correlator/lease components are injected frozen protocols with self-contained fixtures. Real integration requires accepted code; no invented implementation in packet.",
+  "literal_positive_vector": "EXAMPLES.json",
+  "return_evidence_required": [
+    "changedfiles SHA256 + patch only allowed paths",
+    "manifest exact frozen source unchanged",
+    "all own tests run exitcodes skip0",
+    "positive golden vector actual output",
+    "negative acceptance vectors actual expected codes",
+    "inherited accepted contracts/source tests regression results separately, no claim fullPASS withknownfailures"
+  ],
+  "status": "READY_FOR_PACKAGE_REVIEW",
+  "error_class_contract": "Public module-specific ValueError subclass with stable .code:str; str(exception)==code; error message contains code only, never input/body/email/token/SQL/credentials. Injected sameTXguard errors explicitly mapped by F115 contract.",
+  "project_id": "sales-manager-first",
+  "shared_contract_file": "SHARED_CONTRACTS.json"
+}

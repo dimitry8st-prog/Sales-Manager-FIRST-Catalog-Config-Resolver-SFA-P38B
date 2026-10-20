@@ -1,0 +1,59 @@
+{
+  "contract_version": "FIRST_F1_29_R1",
+  "project_id": "sales-manager-first",
+  "candidate": "Константин / Constantin",
+  "status": "TASK_PACKAGE_NOT_IMPLEMENTATION",
+  "public_api": "qualify_and_ingest(candidate, *, binding, policy, resolve_assessment, ingest, now)",
+  "allowed_changes": [
+    "sales_runtime_qualification.py",
+    "candidate_tests/**",
+    "RETURN_REPORT.md",
+    "raw_logs/**",
+    "return.patch"
+  ],
+  "protected": [
+    "CONTRACT.json",
+    "CHECK_PACKAGE.py",
+    "PROTECTED_SHA256.json",
+    "reference/**",
+    "fixtures/**",
+    "tests/**",
+    "TASK_ORDER_RU.md",
+    "RETURN_GUIDE.md",
+    "INTEGRATION.md"
+  ],
+  "dependency_paths": [
+    "sales_discovery_qualification.py"
+  ],
+  "input_fixture_origin": "tests/fixtures/first_discovery_qualification/positive_basic.json",
+  "trusted_ports": "Explicit caller-injected server-owned callable; no task-payload fallback",
+  "no_import_side_effects": true,
+  "integration_status": "NOT_CONNECTED",
+  "out_of_scope": [
+    "network",
+    "database",
+    "live send",
+    "shared source edits",
+    "policy invention",
+    "existing assignment takeover"
+  ],
+  "output": "Exact keys {qualification, ingest_result}; qualification equals accepted F110 output; ingest_result is callback return object or None",
+  "rules": [
+    "Require callable(resolve_assessment) and callable(ingest) before any port call, else RuntimeQualificationError(\"TRUSTED_PORT_REQUIRED\")",
+    "resolve_assessment(deepcopy(candidate)) exactly once; never accept assessment from metadata/task flags",
+    "qualify_candidate(candidate, assessment, binding=binding, policy=policy, now=now) exact accepted call",
+    "Only verdict QUALIFIED_FOR_PREPARATION calls ingest(deepcopy(candidate), qualification=deepcopy(qualification)) once",
+    "NEEDS_REVIEW and NOT_QUALIFIED return ingest_result None and zero ingest calls",
+    "Propagate exact accepted dependency/resolver/ingest exception object, including DuplicateLead; do not turn error into review/success",
+    "No mutation of candidate/binding/policy/assessment; qualify inputs must be snapshots to protect callers from injected ports"
+  ],
+  "error_class": "RuntimeQualificationError(ValueError): code attribute, str(error)==code; no input echo",
+  "task_id": "F1-29",
+  "revision": "R1",
+  "stage": "PREPARED_NOT_ISSUED",
+  "external_effect_authorized": false,
+  "integration_performed": false,
+  "handoff_revision": "H2",
+  "package_revision": "R2",
+  "integration_mapping": "reference/qualification_binding_mapper.py frozen integration-owner mechanical map; direct projection binding INVALID_SCHEMA"
+}

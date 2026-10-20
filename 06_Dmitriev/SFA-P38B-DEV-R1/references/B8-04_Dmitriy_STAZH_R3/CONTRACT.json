@@ -1,0 +1,65 @@
+{
+  "id": "B8-04",
+  "revision": "R3",
+  "status": "READY_TO_DEVELOP",
+  "candidate": "Дмитрий стажер",
+  "module": "first_materials_runtime",
+  "scope_fields": [
+    "client_id",
+    "campaign_id",
+    "lead_id",
+    "mailbox_ref",
+    "thread_id"
+  ],
+  "scope_semantics": "LeadScope; prepare_initial uses InitialScope thread_id=null",
+  "operations": {
+    "prepare": {
+      "request_id": "id",
+      "event_id": "id",
+      "catalog_version": "id",
+      "kind": "PRODUCT_INFO|PRESENTATION"
+    },
+    "prepare_initial": {
+      "request_id": "id",
+      "candidate_ref": "id",
+      "assessment_ref": "id",
+      "catalog_version": "id"
+    }
+  },
+  "dependency_ports": [
+    "catalog.resolve",
+    "d1.event",
+    "f129.materialize",
+    "f129.qualify",
+    "f130.materialize_initial",
+    "materials.save",
+    "dispatch.propose"
+  ],
+  "capabilities": {
+    "prepare": "materials.prepare",
+    "prepare_initial": "materials.prepare"
+  },
+  "abi": "create_service(ports).execute(operation,request)->{status,data}",
+  "details": "prepare reads catalog.resolve and d1.event using scope+event_id, rejects terminal authority or unapproved fact/template/reference. Calls existing F129 materializer/qualification and existing locale renderer through f129.materialize, not new renderer/research engine. PRODUCT_INFO/PRESENTATION only in V1; event must be informational HUMAN_QUESTION, INTEREST routed to handoff, never continuing sale. Response data={request_id,material_ref,catalog_version}; material hash/locale/pins/approved facts persisted through materials.save adapter before dispatch.propose. Stable request same source bytes => REPLAY; changed input=>CONFLICT. No direct provider. Presentation attachment comes from approved artifact ref, no invented attachment or link. F129 unavailable=>DEPENDENCY_UNAVAILABLE, no replacement. prepare_initial(scope:InitialScope,request_id,candidate_ref,assessment_ref,catalog_version) preserves original initial research→qualification→materials→AUTO queue chain. Trusted refs resolve exact F129 candidate/assessment/binding/policy; f129.qualify invokes existing qualify_candidate. Only QUALIFIED_FOR_PREPARATION continues via f130.materialize_initial→materials.save→dispatch.propose(kind INITIAL_OUTREACH); NEEDS_REVIEW/NOT_QUALIFIED yields BLOCKED with verdict, no materials/send. Scope has five original F114 keys with thread_id=null for initial SEND; never fake provider thread. Initial operation does not require an inbound HUMAN_QUESTION. Product question prepare remains as above.",
+  "own_paths": [
+    "solution/first_materials_runtime/**",
+    "tests/first_materials_runtime/**",
+    "integration_proposal/B8-04.patch",
+    "return/**"
+  ],
+  "migration_reservation": {
+    "id": "b8r2.04.0001",
+    "path": "solution/first_materials_runtime/migrations/0001.sql",
+    "kind": "RESERVED_PROPOSAL_ONLY",
+    "sql_owner": "first_materials_runtime",
+    "aggregate_merge_owner": "central integrator",
+    "no_shared_serial": true
+  },
+  "reference_base": "registry v164/source549 manifest snapshot, NOT current installation claim",
+  "prerequisites_for_integration": [
+    "R2 PRODUCT_INFO/PRESENTATION consumer ABI frozen; F130 source reused.",
+    "Интеграция: exact accepted F129 текущего исполнителя и B8-01 approved raw bundle, trusted assessment/source bindings."
+  ],
+  "implementation_status": "NOT_IMPLEMENTED",
+  "no_outbound": true
+}

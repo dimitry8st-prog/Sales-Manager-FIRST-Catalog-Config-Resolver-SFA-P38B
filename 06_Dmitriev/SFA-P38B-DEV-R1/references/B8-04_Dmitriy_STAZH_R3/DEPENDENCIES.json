@@ -1,0 +1,27 @@
+{
+  "F115": {
+    "status": "UNRESOLVED_ACCEPTANCE_AND_OWNER_EXTENSION",
+    "applies": "B8-07 and handoff/dispatch consumers",
+    "rule": "no replacement first_action_journal, no duplicate candidate work; accepted exact R9+separate evidence addendum before integration"
+  },
+  "D1": {
+    "status": "APPROVED_R4_REFERENCE; LIVE_SOURCE_MAPPING_AND_ACTIVE_APPEND_OWNER_EXTENSION_REQUIRED",
+    "rule": "single writer; no bypass stopped-only staging guard"
+  },
+  "F117": {
+    "status": "EXISTING_ASSIGNEE_DEPENDENCY",
+    "rule": "no rewrite; exact accepted bytes before connected inbox"
+  },
+  "F129": {
+    "status": "EXISTING_ASSIGNEE_DEPENDENCY",
+    "rule": "no rewrite; exact accepted bytes before materialization integration"
+  },
+  "F131": {
+    "status": "NATIVE_WINDOWS_SYMLINK_GATE_BEFORE_INSTALL",
+    "rule": "not offline development blocker"
+  },
+  "batch8": {
+    "offline": "synthetic authenticated facade development allowed now",
+    "integration": "one central integrator, accepted exact dependencies; fresh registry/source delta reconcile"
+  }
+}

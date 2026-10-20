@@ -1,0 +1,59 @@
+{
+  "contract_version": "FIRST_F1_28_R1",
+  "project_id": "sales-manager-first",
+  "candidate": "Владимир new",
+  "status": "TASK_PACKAGE_NOT_IMPLEMENTATION",
+  "public_api": "resolve_campaign_projection(campaign, *, resolve_config, now)",
+  "allowed_changes": [
+    "sales_runtime_binding.py",
+    "candidate_tests/**",
+    "RETURN_REPORT.md",
+    "raw_logs/**",
+    "return.patch"
+  ],
+  "protected": [
+    "CONTRACT.json",
+    "CHECK_PACKAGE.py",
+    "PROTECTED_SHA256.json",
+    "reference/**",
+    "fixtures/**",
+    "tests/**",
+    "TASK_ORDER_RU.md",
+    "RETURN_GUIDE.md",
+    "INTEGRATION.md"
+  ],
+  "dependency_paths": [
+    "sales_first_binding.py",
+    "sales_campaign_projection.py"
+  ],
+  "input_fixture_origin": "tests/fixtures/first_binding/positive_en_ru.json",
+  "trusted_ports": "Explicit caller-injected server-owned callable; no task-payload fallback",
+  "no_import_side_effects": true,
+  "integration_status": "NOT_CONNECTED",
+  "out_of_scope": [
+    "network",
+    "database",
+    "live send",
+    "shared source edits",
+    "policy invention",
+    "existing assignment takeover"
+  ],
+  "output": "Exact deep-independent dict from project_campaign_binding(config, now=now), no added fields",
+  "rules": [
+    "Require type(campaign) is dict, type(campaign.get(\"campaign_id\")) is str and nonempty; otherwise RuntimeBindingError(\"INVALID_RUNTIME_CAMPAIGN\")",
+    "Require callable(resolve_config), else RuntimeBindingError(\"TRUSTED_RESOLVER_REQUIRED\")",
+    "Resolver called exactly once with campaign[\"campaign_id\"]. Never read campaign.config or payload for binding.",
+    "Pass resolver result unchanged to accepted F112; propagate resolver/dependency exceptions unchanged",
+    "After projection validate projection.runtime_campaign_id == campaign.campaign_id; else RuntimeBindingError(\"RUNTIME_SCOPE_MISMATCH\")",
+    "Do not mutate campaign/config, do not merge fields, preserve exact F112 client_id/make_campaign_id; release_mode NO_OUTBOUND"
+  ],
+  "error_class": "RuntimeBindingError(ValueError): code attribute, str(error)==code; no input echo",
+  "task_id": "F1-28",
+  "revision": "R1",
+  "stage": "PREPARED_NOT_ISSUED",
+  "external_effect_authorized": false,
+  "integration_performed": false,
+  "handoff_revision": "H2",
+  "package_revision": "R2",
+  "integration_mapping": "reference/qualification_binding_mapper.py frozen integration-owner mechanical map; direct projection binding INVALID_SCHEMA"
+}

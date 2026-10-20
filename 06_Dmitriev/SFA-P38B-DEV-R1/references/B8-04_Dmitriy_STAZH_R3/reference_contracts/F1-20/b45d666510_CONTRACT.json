@@ -1,0 +1,98 @@
+{
+  "task_id": "F1-20",
+  "revision": "R1",
+  "assignee_label": "Александр Гуляев 1 уровень",
+  "title": "Pinned action language binding",
+  "allowed_paths": [
+    "source/sales_action_locale.py",
+    "source/tests/wave3/test_f120.py",
+    "source/tests/fixtures/wave3/f120/*.json"
+  ],
+  "contract_version": "FIRST_WAVE3_20_V1",
+  "module_api": [
+    {
+      "signature": "bind_action_locale(loaded_registry: dict, binding_config: dict, *, now: datetime, locale: str, required_template_id: str, pinned_pack_version: str|None) -> dict",
+      "input": "Accepted F106 loaded registry; accepted F105 config input (call validator using explicit now:datetime, never pass F105 augmented output into raw validator); locale,required_template_id,pinned_pack_version; exact pack/template shape copied from F106 source. Match binding.language_pack_versions and loaded registry versions; approved fact subset.",
+      "output": "{schema_version:FIRST_ACTION_LANGUAGE_V1,status:BOUND,locale:str,language_pack_version:str,registry_version:str,approved_template:dict,approved_fact_ids:list[str]}",
+      "errors": [
+        "INVALID_INPUT",
+        "F106 LanguageRegistryError codes propagated",
+        "BINDING_LANGUAGE_MISMATCH",
+        "PACK_VERSION_CHANGED",
+        "TEMPLATE_NOT_APPROVED",
+        "FACT_SCOPE_MISMATCH"
+      ],
+      "statuses": [
+        "BOUND"
+      ],
+      "error_precedence": [
+        "INVALID_INPUT",
+        "F106 LanguageRegistryError codes propagated",
+        "BINDING_LANGUAGE_MISMATCH",
+        "PACK_VERSION_CHANGED",
+        "TEMPLATE_NOT_APPROVED",
+        "FACT_SCOPE_MISMATCH"
+      ]
+    }
+  ],
+  "accepted_source_dependencies": [
+    "sales_language_registry.py",
+    "sales_first_binding.py"
+  ],
+  "owning_FG": [
+    "FG01",
+    "FG04",
+    "FG06"
+  ],
+  "integration_seam": {
+    "callsites": [
+      "sales_manager.process_prepare",
+      "sales_manager.process_send",
+      "sales_manager.process_task"
+    ],
+    "integration_changes": "Integrator invokes build_policy_language_fields and crosschecks actual loaded pack versus F105 version map; persists selected version into action/intent and maps approved template fields to Camel frozen policy without changing Camel API."
+  },
+  "acceptance_vectors": [
+    "EN/RU positive",
+    "third fixture locale without core change",
+    "pinned version drift reject",
+    "binding/registry version mismatch",
+    "fact outside binding reject",
+    "missing approved template",
+    "source input immutable",
+    "no grant extension"
+  ],
+  "scope_exclusions": [
+    "No registry rewrite",
+    "No new selling-language quality claim",
+    "No Make prompt edit"
+  ],
+  "gate_closure": "component acceptance does not automatically close FG",
+  "new_paths_only": true,
+  "error_precedence": {
+    "bind_action_locale(loaded_registry: dict, binding_config: dict, *, now: datetime, locale: str, required_template_id: str, pinned_pack_version: str|None) -> dict": [
+      "INVALID_INPUT",
+      "F106 LanguageRegistryError codes propagated",
+      "BINDING_LANGUAGE_MISMATCH",
+      "PACK_VERSION_CHANGED",
+      "TEMPLATE_NOT_APPROVED",
+      "FACT_SCOPE_MISMATCH"
+    ]
+  },
+  "design_status": "FROZEN_BOUND_INTERFACE",
+  "fixtures_path": "EXAMPLES.json",
+  "accepted_dependency_rule": "Only accepted SOURCE dependencies are production imports. Pending normalizer/correlator/lease components are injected frozen protocols with self-contained fixtures. Real integration requires accepted code; no invented implementation in packet.",
+  "literal_positive_vector": "EXAMPLES.json",
+  "return_evidence_required": [
+    "changedfiles SHA256 + patch only allowed paths",
+    "manifest exact frozen source unchanged",
+    "all own tests run exitcodes skip0",
+    "positive golden vector actual output",
+    "negative acceptance vectors actual expected codes",
+    "inherited accepted contracts/source tests regression results separately, no claim fullPASS withknownfailures"
+  ],
+  "status": "READY_FOR_PACKAGE_REVIEW",
+  "error_class_contract": "Public module-specific ValueError subclass with stable .code:str; str(exception)==code; error message contains code only, never input/body/email/token/SQL/credentials. Injected sameTXguard errors explicitly mapped by F115 contract.",
+  "project_id": "sales-manager-first",
+  "shared_contract_file": "SHARED_CONTRACTS.json"
+}

@@ -1,0 +1,196 @@
+ТЕХНИЧЕСКОЕ ЗАДАНИЕ F1-06, РЕВИЗИЯ R1
+Исполнитель: Александр Гуляев 1 уровень.
+Проект: sales-manager-first.
+Компонент: загрузка и проверка объектов языкового реестра и языковых пакетов.
+
+1. РЕЗУЛЬТАТ ЗАДАНИЯ
+
+Создать чистый Python-модуль: на вход уже разобранные JSON-совместимые dict/list, на выход проверенные независимые копии и языковые поля для policy Camel. Здесь «загрузка» означает загрузку объектов в проверенную структуру, а не чтение файлов или скачивание переводов.
+
+FIRST начинает с английского en-GB и русского ru-RU. Другой язык подключается данными реестра и пакета без изменения Python-ядра. Реальные переводы/коммерческие шаблоны, выбор языка по письму, classifier, Make, API, DB и отправка не входят в задание. Использовать только явно synthetic шаблоны: их нельзя выдавать за утверждённые материалы владельца.
+
+2. БАЗА И ALLOWLIST
+
+Исходный snapshot46файлов находится в source/, хеши в BASE_MANIFEST.json. SHA256 исходного архива 88a1bd4fb420046819fc4b69d4a47ae1583b8228045aedd65cce4ae10d93c29e. Проверить содержимое по manifest, не менять manifest.
+
+Создать только:
+  sales_language_registry.py
+  tests/test_language_registry.py
+  tests/fixtures/first_language_registry/*.json
+
+Все прочие файлы — read-only. Прочитать sales_preparation_contract.py, где текущая проверка имеет фиксированный перечень локалей без ru-RU; не менять его в этом задании. Замена этого ограничения и синхронизация Make будут задачей интегратора. Не редактировать модуль Camel, конфигурации, requirements.txt, Dockerfile, миграции или файлы других разработчиков. Только стандартная библиотека Python3.12.
+
+3. ПУБЛИЧНЫЕ ИНТЕРФЕЙСЫ
+
+В sales_language_registry.py:
+
+  class LanguageRegistryError(ValueError):
+      # code:str; str(error) возвращает только code.
+
+  def validate_language_pack(pack: dict, *, approved_fact_ids: list[str]) -> dict:
+      ...
+
+  def load_language_registry(registry: dict, packs: list[dict], *, approved_fact_ids: list[str]) -> dict:
+      ...
+
+  def build_policy_language_fields(loaded: dict, *, locale: str) -> dict:
+      ...
+
+Все функции детерминированы, без I/O/сети/БД/окружения, не меняют входные объекты. Результат должен быть независимой глубокой копией. Не импортировать невыполненные задания F1-05 или Camel. Разрешены внутренние helpers.
+
+4. ОБЩИЕ ТИПЫ
+
+identifier: строка regex [A-Za-z0-9][A-Za-z0-9_.:-]{0,127}, fullmatch.
+locale_id: строка длиной1..64, regex [A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*, fullmatch. Это локальный формат ID, не полный BCP47 parser. Сохранять регистр; сравнение точное. Не зашивать глобальный enum EN/RU или максимум числа языков.
+text: строка не пустая после strip(); возвращать без изменения, с сохранением Unicode/пробелов.
+approved_fact_ids: list уникальных identifier; может быть пустым для пакетов без фактических утверждений. Это серверный список разрешённых ссылок, не доказательство истинности фактов. Неверный тип/дубликаты — ошибка.
+
+5. СХЕМА ПАКЕТА
+
+pack — dict ровно с полями:
+schema_version: "FIRST_LANGUAGE_PACK_V1";
+locale: locale_id;
+version: identifier;
+templates: непустой dict с ключами template_id:identifier.
+
+Значение каждого templates[template_id] — dict ровно с полями:
+kind: одно из INITIAL, QUESTION, OBJECTION, FOLLOWUP, HANDOFF;
+locale: locale_id, ровно pack.locale;
+subject: строка, для INITIAL непустая после strip(), для остальных может быть пустой;
+body: text;
+fact_ids: list уникальных identifier, каждый входит в approved_fact_ids.
+
+Никаких неизвестных полей. Никакой интерполяции {переменных}, выполнения выражений или HTML-рендеринга: subject/body хранятся как непрозрачный текст. Подстрока, похожая на команду, не выполняется. fact_ids пустой допустим; это не автоматическая гарантия, что текст фактически ничего не утверждает. Проверку смысла и качества перевода делает независимый QA позднее.
+
+validate_language_pack возвращает глубокую копию pack с теми же schema_version и значениями. Никаких verified=true/approved=true/grant полей не добавлять.
+
+6. СХЕМА РЕЕСТРА И ЗАГРУЖЕННОГО РЕЗУЛЬТАТА
+
+registry — dict ровно с полями:
+schema_version: "FIRST_LANGUAGE_REGISTRY_V1";
+registry_version: identifier;
+default_locale: locale_id;
+active_locales: непустой list уникальных locale_id;
+language_pack_versions: dict, ключи ровно active_locales, значения identifier.
+
+default_locale входит в active_locales. packs — list пакетов; для каждого active_locale ровно один пакет, его locale и version точно совпадают с реестром. Повтор локали, недостающий пакет, лишний неактивный пакет или неверная версия отклоняются. Предварительно validate_language_pack проверяет каждый пакет с тем же approved_fact_ids. Разные языки могут использовать один и тот же template_id: это не конфликт, потому что выбор языка предшествует выбору template.
+
+load_language_registry возвращает dict ровно:
+schema_version: "FIRST_LANGUAGE_REGISTRY_LOADED_V1";
+registry_version: копия registry.registry_version;
+default_locale: копия registry.default_locale;
+active_locales: копия registry.active_locales в исходном порядке;
+language_pack_versions: глубокая копия mapping;
+approved_fact_ids: копия входного списка;
+packs_by_locale: dict locale -> проверенная глубокая копия соответствующего pack.
+
+Не считывать дополнительные пакеты автоматически и не делать fallback на случайный язык. Наличие версии в JSON не доказывает независимую приёмку пакета; серверный вызывающий код обязан передавать только принятые версии. Реальные EN/RU входят в более позднюю приёмку FIRST, здесь только synthetic corpus.
+
+7. ПОЛЯ ДЛЯ CAMEL
+
+build_policy_language_fields заново валидирует структуру loaded: точная схема/ключи из раздела6, корректный approved_fact_ids; соответствие active_locales/default/version и каждого packs_by_locale проверяется по правилам разделов5–6. Это защищает от случайной мутации объекта между вызовами; функция не доверяет произвольному dict только из-за schema_version.
+
+locale обязан быть активным. Функция не определяет язык по тексту. Возвращает ровно:
+  locale: выбранный locale;
+  allowed_locales: копия loaded.active_locales;
+  language_pack_versions: копия loaded.language_pack_versions;
+  approved_templates: dict только шаблонов выбранного языка, каждый элемент:
+    {"body": исходный body, "fact_ids": копия fact_ids, "locale": выбранный locale}.
+
+Все template_id выбранного пакета сохраняются. kind/subject остаются в loaded.packs_by_locale, но не передаются в минимальные шаблоны Camel. Camel не выбирает template по kind самостоятельно: доверенный classifier/adapter позже выбирает подходящий template_id и проверяет соответствие события. Это не выполняется здесь. Сама проекция не разрешает отправку INITIAL/HANDOFF через reducer. Нельзя молча добавлять product_id/sender_ref/policy_version/лимиты — их предоставит интегратор из server-owned binding, отдельно сверив версии. Полного FIRST_POLICY_V1 здесь не возвращать.
+
+8. КОДЫ ОШИБОК
+
+INVALID_INPUT — аргумент не того базового типа;
+INVALID_FACT_SET — неверный approved_fact_ids;
+INVALID_SCHEMA — неверный schema_version или набор полей;
+INVALID_IDENTIFIER — неверный registry_version/version/template_id;
+INVALID_LOCALE — неверный формат локали, duplicate active_locales или default отсутствует в active_locales;
+INVALID_TEMPLATE — неверный kind/body/subject/fact_ids structure, повтор fact_id;
+TEMPLATE_LOCALE_MISMATCH — template.locale отличается от pack.locale;
+UNAPPROVED_FACT — структурно корректный fact_id отсутствует в approved_fact_ids;
+PACK_SET_MISMATCH — missing/extra/duplicate локаль пакета или неверный keyset language_pack_versions/packs_by_locale;
+PACK_VERSION_MISMATCH — версия пакета отличается от реестра;
+LOCALE_NOT_ACTIVE — корректный locale запроса build_policy_language_fields отсутствует в активном наборе.
+
+Все ошибки — LanguageRegistryError; str(error) содержит только code. Не выводить тексты шаблонов или входные данные. Порядок групп проверки: базовые типы -> approved_fact_ids -> схема контейнера -> идентификаторы/локали -> состав/версии пакетов -> содержимое шаблонов. validate_language_pack проверяет базовые типы/approved_fact_ids/схему/идентификаторы/локали/шаблоны. При нескольких ошибках достаточно детерминированного порядка, задокументированного автором. Приёмочные negative fixtures изолируют одну ошибку. Наружу не должны выходить случайные KeyError/AttributeError/TypeError от повреждённых входных данных.
+
+9. ПОЛНЫЙ ПРИМЕР
+
+approved_fact_ids = ["fact-test"]
+registry = {
+  "schema_version":"FIRST_LANGUAGE_REGISTRY_V1",
+  "registry_version":"registry-v1",
+  "default_locale":"en-GB",
+  "active_locales":["en-GB","ru-RU"],
+  "language_pack_versions":{"en-GB":"en-v1","ru-RU":"ru-v1"}
+}
+packs = [
+  {"schema_version":"FIRST_LANGUAGE_PACK_V1","locale":"en-GB","version":"en-v1",
+   "templates":{"explain":{"kind":"QUESTION","locale":"en-GB","subject":"","body":"Synthetic approved example.","fact_ids":["fact-test"]}}},
+  {"schema_version":"FIRST_LANGUAGE_PACK_V1","locale":"ru-RU","version":"ru-v1",
+   "templates":{"explain":{"kind":"QUESTION","locale":"ru-RU","subject":"","body":"Синтетический пример для проверки.","fact_ids":["fact-test"]}}}
+]
+
+loaded = load_language_registry(registry, packs, approved_fact_ids=approved_fact_ids)
+result = build_policy_language_fields(loaded, locale="ru-RU")
+
+Ожидается:
+{
+  "locale":"ru-RU",
+  "allowed_locales":["en-GB","ru-RU"],
+  "language_pack_versions":{"en-GB":"en-v1","ru-RU":"ru-v1"},
+  "approved_templates":{"explain":{"body":"Синтетический пример для проверки.","fact_ids":["fact-test"],"locale":"ru-RU"}}
+}
+
+Отдельные отрицательные примеры на глубоких копиях:
+- packs[1]["version"] = "ru-v2" -> PACK_VERSION_MISMATCH.
+- packs[1]["templates"]["explain"]["locale"] = "en-GB" -> TEMPLATE_LOCALE_MISMATCH.
+- packs[1]["templates"]["explain"]["fact_ids"] = ["not-approved"] -> UNAPPROVED_FACT.
+- packs.pop() -> PACK_SET_MISMATCH.
+- registry["active_locales"].append("ru-RU") -> INVALID_LOCALE.
+- build_policy_language_fields(валидный loaded, locale="de-DE") -> LOCALE_NOT_ACTIVE.
+- packs[0]["templates"]["explain"]["body"] = "  " -> INVALID_TEMPLATE.
+
+Расширение: добавить de-DE в active_locales, de-DE:"de-v1" в mapping и synthetic пакетde-DE версииde-v1. Код модуля не менять. Этот тест доказывает расширяемость, но не поддержку реального немецкого рынка/языка.
+
+10. ТЕСТОВАЯ МАТРИЦА
+
+unittest: полный EN/RU пример; synthetic третий язык; одинаковый template_id двух языков не смешивает body; duplicate/missing/extra pack; version mismatch; template.locale mismatch; пустые/неверные поля; invalid schema; невидимый/неактивный locale; Unicode без изменения; неподтверждённый fact; пустой approved_fact_ids с пустым fact_ids; INITIAL с пустой subject; unknownkind; повреждённый loaded после первого вызова; исходные объекты не изменяются и не разделяют вложенные mutable objects с результатом; повторные вызовы равны; шаблон с буквальным текстом, похожим на Python/команду, остаётся текстом; сообщения ошибок не раскрывают secret sentinel. Проверить отсутствие импорта psycopg/сети/credentials для использования модуля.
+
+11. РАБОЧИЙ ПОРЯДОК И КОМАНДЫ
+
+TASK-CP0: проверить manifest/назначение/allowlist. При иной базе или пересечении остановить только затронутую работу и написать координатору.
+TASK-CP1: показать перечень трёх функций, schemas и тестов по этому ТЗ; не менять контракт самовольно.
+TASK-CP2: реализовать модуль и тесты, назвать фактические затруднения/ограничения.
+TASK-CP3: полный RETURN ZIP, READY_FOR_REVIEW. Это не независимый PASS и не принятое внедрение.
+Далее отдельный reviewer, отдельный инженер внедрения, независимая проверка конечной версии. Автор не принимает сам себя.
+
+Из source/:
+  python3 --version
+  python3 -m unittest discover -s tests -p test_language_registry.py -v
+  python3 -m py_compile sales_language_registry.py tests/test_language_registry.py
+
+Нужен Python3.12; на Windows допустим py -3.12, с фиксацией фактической команды. Записывать настоящие stdout/stderr/exitcode. Для NOT_RUN указать причину. Не заявлять PASS на macOS, если проверяли Linux/Windows. Модуль должен оставаться переносимым на macOS за счёт stdlib и отсутствия платформенных путей. Проверить, что все изменения в allowlist; исходные46файлов не изменены.
+
+12. ВОЗВРАТ ОДНИМ ZIP
+
+Один корень F1-06_RETURN_R1:
+TASK_REPORT.md — task/project/исполнитель/return revision/base и фактическая среда, выполненные критерии, инструкция будущего подключения;
+source/ — только три разрешённых группы новых файлов;
+patch.diff — git-compatible добавление новых файлов, проверенное в отдельной чистой копии;
+RETURN_MANIFEST.json — task_id F1-06, return_revision, исходный archiveSHA256, SHA256 каждого нового файла;
+TEST_RESULTS.md — требование -> test/command -> rawlog -> exitcode -> PASS/FAIL/NOT_RUN;
+logs/ — сырые журналы;
+LIMITATIONS.md — ограничения и непроверенные действия.
+
+Не включать credentials, реальные письма клиентов, .git/venv/__pycache__. Не заменять ZIP фразой «готово». Не придумывать время выдачи/начала/сдачи; неизвестное отмечать UNKNOWN. Координатор после каждого возврата и попытки интеграции обязан сформировать отчёт главного инженера, в том числе при изменении индекса0.
+
+13. ИНТЕГРАЦИЯ И ГРАНИЦЫ ГОТОВНОСТИ
+
+F1-05 проверяет структуру campaign binding, а F1-06 — согласованность отдельных реестра/пакетов и их проекцию для Camel. Интегратор сверяет, что allowed_locales/version mapping F1-05 совпадают с F1-06; проверяет реальное принятие пакетов; добавляет остальные policy поля для Camel. Нельзя доверять совпадению названий версий без проверки содержимого/принятого manifest. Никаких runtime imports между параллельными заданиями сейчас не требуется.
+
+Вклад в FG01/FG04/FG06. Структурная валидация не закрывает эти gates; качество перевода, классификатор, реальные разрешённые факты, подключение Make и замена fixedlocale в подготовке остаются последующими проверяемыми работами. NO_OUTBOUND, существующая архитектура runtime/PostgreSQL/Make и production-конфигурация не меняются.
+
+ПРОВЕРКИ ИЗ КОРНЯ ПАКЕТА
+Перед реализацией и перед возвратом выполнить python3 CHECK_PACKAGE.py. Для проверки исходной регрессии выполнить python3 RUN_EXISTING_REGRESSION.py. Последний helper копирует только исходные46файлов во временный каталог; эта проверка не заменяет отдельный запуск новых тестов из source/, указанный выше. Сохранить реальные logs/exitcodes. Следовать приложенному руководству01 по Python/macOS; не менять системную конфигурацию и не утверждать проверку ОС без фактического запуска.
