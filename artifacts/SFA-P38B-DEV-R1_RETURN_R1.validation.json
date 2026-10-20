@@ -1,0 +1,40 @@
+{
+  "archive": "artifacts/SFA-P38B-DEV-R1_RETURN_R1.zip",
+  "clean_runs": 2,
+  "finished_utc": "2026-10-20T03:44:01.350485+00:00",
+  "sha256": "633c81da29bf73877c2558dfa928f8e9ff40905ec6ad5e535f1fa363e3092562",
+  "started_utc": "2026-10-20T03:43:59.139418+00:00",
+  "status": "PASS",
+  "test_totals": [
+    228,
+    228
+  ],
+  "validations": [
+    {
+      "crc": "PASS",
+      "exact_manifest": "PASS",
+      "files": 142,
+      "fresh_extraction_bytes": "PASS",
+      "issued_files_unchanged": 92,
+      "protected_files": 90,
+      "safe_single_root": "06_Dmitriev",
+      "sha256": "633c81da29bf73877c2558dfa928f8e9ff40905ec6ad5e535f1fa363e3092562",
+      "status": "PASS",
+      "tested_product_and_candidate_bytes": "PASS",
+      "validation": 1
+    },
+    {
+      "crc": "PASS",
+      "exact_manifest": "PASS",
+      "files": 142,
+      "fresh_extraction_bytes": "PASS",
+      "issued_files_unchanged": 92,
+      "protected_files": 90,
+      "safe_single_root": "06_Dmitriev",
+      "sha256": "633c81da29bf73877c2558dfa928f8e9ff40905ec6ad5e535f1fa363e3092562",
+      "status": "PASS",
+      "tested_product_and_candidate_bytes": "PASS",
+      "validation": 2
+    }
+  ]
+}

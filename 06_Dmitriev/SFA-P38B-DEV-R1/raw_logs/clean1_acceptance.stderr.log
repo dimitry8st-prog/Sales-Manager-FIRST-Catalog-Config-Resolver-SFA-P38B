@@ -1,0 +1,18 @@
+test_constructor_has_zero_effect (test_acceptance.ConfigAcceptance.test_constructor_has_zero_effect) ... ok
+test_consumer_called_once_with_pins (test_acceptance.ConfigAcceptance.test_consumer_called_once_with_pins) ... ok
+test_exception_object_passes_unchanged (test_acceptance.ConfigAcceptance.test_exception_object_passes_unchanged) ... ok
+test_expiry_clock_changes (test_acceptance.ConfigAcceptance.test_expiry_clock_changes) ... ok
+test_invalid_campaign_before_clock_service (test_acceptance.ConfigAcceptance.test_invalid_campaign_before_clock_service) ... ok
+test_invalid_constructor_values (test_acceptance.ConfigAcceptance.test_invalid_constructor_values) ... ok
+test_missing_capability_not_upgraded (test_acceptance.ConfigAcceptance.test_missing_capability_not_upgraded) ... ok
+test_missing_version_not_fallback (test_acceptance.ConfigAcceptance.test_missing_version_not_fallback) ... ok
+test_naive_clock_zero_service (test_acceptance.ConfigAcceptance.test_naive_clock_zero_service) ... ok
+test_real_catalog_consumer_F128_positive (test_acceptance.ConfigAcceptance.test_real_catalog_consumer_F128_positive) ... ok
+test_return_independent_each_call (test_acceptance.ConfigAcceptance.test_return_independent_each_call) ... ok
+test_revocation_after_success_is_not_cached (test_acceptance.ConfigAcceptance.test_revocation_after_success_is_not_cached) ... ok
+test_wrong_scope_refused_by_real_service (test_acceptance.ConfigAcceptance.test_wrong_scope_refused_by_real_service) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.012s
+
+OK

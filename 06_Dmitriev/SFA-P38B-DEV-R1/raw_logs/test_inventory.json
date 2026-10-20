@@ -1,0 +1,72 @@
+{
+  "copies": [
+    {
+      "count": 29,
+      "test_ids": [
+        "test_resolver.ResolverContractTests.test_F128_ignores_payload_config_and_preserves_inputs",
+        "test_resolver.ResolverContractTests.test_authentication_is_rechecked_after_success",
+        "test_resolver.ResolverContractTests.test_aware_non_utc_clock_preserves_object_and_instant",
+        "test_resolver.ResolverContractTests.test_canonical_uuid_has_no_extra_version_restriction",
+        "test_resolver.ResolverContractTests.test_capability_is_rechecked_after_success",
+        "test_resolver.ResolverContractTests.test_clock_exception_identity_and_no_retry",
+        "test_resolver.ResolverContractTests.test_clock_requires_exact_aware_datetime_before_consumer",
+        "test_resolver.ResolverContractTests.test_constructor_rejects_exact_type_and_identifier_boundaries",
+        "test_resolver.ResolverContractTests.test_constructor_rejects_noncallable_dependencies",
+        "test_resolver.ResolverContractTests.test_constructor_uses_existing_unicode_id_policy_without_effects",
+        "test_resolver.ResolverContractTests.test_consumer_exception_identity_single_call_and_no_retry",
+        "test_resolver.ResolverContractTests.test_hash_change_after_success_is_revalidated",
+        "test_resolver.ResolverContractTests.test_injected_reader_clock_rechecks_expiry_without_mutating_service_clock",
+        "test_resolver.ResolverContractTests.test_invalid_campaign_precedes_clock_and_consumer",
+        "test_resolver.ResolverContractTests.test_malformed_datetime_timezone_is_invalid_clock_before_consumer",
+        "test_resolver.ResolverContractTests.test_missing_pin_does_not_fallback_to_existing_version",
+        "test_resolver.ResolverContractTests.test_module_initialization_and_real_call_have_no_direct_io",
+        "test_resolver.ResolverContractTests.test_mutating_result_does_not_change_later_calls_or_storage",
+        "test_resolver.ResolverContractTests.test_product_source_has_no_system_clock_or_outbound_entrypoint",
+        "test_resolver.ResolverContractTests.test_public_signature_and_error_abi",
+        "test_resolver.ResolverContractTests.test_real_chain_order_exact_scope_pin_and_single_calls",
+        "test_resolver.ResolverContractTests.test_real_consumer_preserves_service_exception_identity",
+        "test_resolver.ResolverContractTests.test_rehashed_foreign_scope_is_rejected_by_real_bundle_validator",
+        "test_resolver.ResolverContractTests.test_rehashed_invalid_binding_is_rejected_by_accepted_core",
+        "test_resolver.ResolverContractTests.test_repeated_reads_reenter_clock_service_and_consumer",
+        "test_resolver.ResolverContractTests.test_resolver_pins_are_fixed_and_new_version_requires_new_resolver",
+        "test_resolver.ResolverContractTests.test_return_is_deepcopy_of_real_consumer_raw_config_only",
+        "test_resolver.ResolverContractTests.test_revocation_is_rechecked_after_success",
+        "test_resolver.ResolverContractTests.test_tenant_is_rechecked_after_success_without_auth_repair"
+      ]
+    },
+    {
+      "count": 29,
+      "test_ids": [
+        "test_resolver.ResolverContractTests.test_F128_ignores_payload_config_and_preserves_inputs",
+        "test_resolver.ResolverContractTests.test_authentication_is_rechecked_after_success",
+        "test_resolver.ResolverContractTests.test_aware_non_utc_clock_preserves_object_and_instant",
+        "test_resolver.ResolverContractTests.test_canonical_uuid_has_no_extra_version_restriction",
+        "test_resolver.ResolverContractTests.test_capability_is_rechecked_after_success",
+        "test_resolver.ResolverContractTests.test_clock_exception_identity_and_no_retry",
+        "test_resolver.ResolverContractTests.test_clock_requires_exact_aware_datetime_before_consumer",
+        "test_resolver.ResolverContractTests.test_constructor_rejects_exact_type_and_identifier_boundaries",
+        "test_resolver.ResolverContractTests.test_constructor_rejects_noncallable_dependencies",
+        "test_resolver.ResolverContractTests.test_constructor_uses_existing_unicode_id_policy_without_effects",
+        "test_resolver.ResolverContractTests.test_consumer_exception_identity_single_call_and_no_retry",
+        "test_resolver.ResolverContractTests.test_hash_change_after_success_is_revalidated",
+        "test_resolver.ResolverContractTests.test_injected_reader_clock_rechecks_expiry_without_mutating_service_clock",
+        "test_resolver.ResolverContractTests.test_invalid_campaign_precedes_clock_and_consumer",
+        "test_resolver.ResolverContractTests.test_malformed_datetime_timezone_is_invalid_clock_before_consumer",
+        "test_resolver.ResolverContractTests.test_missing_pin_does_not_fallback_to_existing_version",
+        "test_resolver.ResolverContractTests.test_module_initialization_and_real_call_have_no_direct_io",
+        "test_resolver.ResolverContractTests.test_mutating_result_does_not_change_later_calls_or_storage",
+        "test_resolver.ResolverContractTests.test_product_source_has_no_system_clock_or_outbound_entrypoint",
+        "test_resolver.ResolverContractTests.test_public_signature_and_error_abi",
+        "test_resolver.ResolverContractTests.test_real_chain_order_exact_scope_pin_and_single_calls",
+        "test_resolver.ResolverContractTests.test_real_consumer_preserves_service_exception_identity",
+        "test_resolver.ResolverContractTests.test_rehashed_foreign_scope_is_rejected_by_real_bundle_validator",
+        "test_resolver.ResolverContractTests.test_rehashed_invalid_binding_is_rejected_by_accepted_core",
+        "test_resolver.ResolverContractTests.test_repeated_reads_reenter_clock_service_and_consumer",
+        "test_resolver.ResolverContractTests.test_resolver_pins_are_fixed_and_new_version_requires_new_resolver",
+        "test_resolver.ResolverContractTests.test_return_is_deepcopy_of_real_consumer_raw_config_only",
+        "test_resolver.ResolverContractTests.test_revocation_is_rechecked_after_success",
+        "test_resolver.ResolverContractTests.test_tenant_is_rechecked_after_success_without_auth_repair"
+      ]
+    }
+  ]
+}

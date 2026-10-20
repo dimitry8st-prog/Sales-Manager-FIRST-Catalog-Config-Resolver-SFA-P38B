@@ -1,0 +1,352 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/workspace/scratch/8febe5931947/p38b-r1/repo/06_Dmitriev/SFA-P38B-DEV-R1/return.patch"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/patch/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.006833,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:43:59.192611+00:00",
+      "label": "patch_check",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.185776+00:00",
+      "stderr": "patch_check.stderr.log",
+      "stdout": "patch_check.stdout.log"
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "/workspace/scratch/8febe5931947/p38b-r1/repo/06_Dmitriev/SFA-P38B-DEV-R1/return.patch"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/patch/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.003973,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:43:59.200004+00:00",
+      "label": "patch_apply",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.196030+00:00",
+      "stderr": "patch_apply.stderr.log",
+      "stdout": "patch_apply.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "integrity"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean1/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.070381,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:43:59.303196+00:00",
+      "label": "clean1_integrity_before",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.232815+00:00",
+      "stderr": "clean1_integrity_before.stderr.log",
+      "stdout": "clean1_integrity_before.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "baseline"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean1/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.187065,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:43:59.490498+00:00",
+      "label": "clean1_baseline",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.303443+00:00",
+      "stderr": "clean1_baseline.stderr.log",
+      "stdout": "clean1_baseline.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "acceptance"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean1/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.162623,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:43:59.653203+00:00",
+      "label": "clean1_acceptance",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.490592+00:00",
+      "stderr": "clean1_acceptance.stderr.log",
+      "stdout": "clean1_acceptance.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-c",
+        "import json,pathlib,sys,unittest\nroot=pathlib.Path.cwd()\nsys.path[:0]=[str(root/'source'),str(root/'checks')]\nsuite=unittest.TestLoader().discover(str(root/'candidate_tests'))\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item.id()\nids=list(flatten(suite))\nprint(json.dumps({'count':suite.countTestCases(),'test_ids':ids},sort_keys=True))\n"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean1/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.174443,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:43:59.827765+00:00",
+      "label": "clean1_inventory",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.653336+00:00",
+      "stderr": "clean1_inventory.stderr.log",
+      "stdout": "clean1_inventory.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "candidate"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean1/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.224959,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.052830+00:00",
+      "label": "clean1_candidate",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:43:59.827886+00:00",
+      "stderr": "clean1_candidate.stderr.log",
+      "stdout": "clean1_candidate.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "integrity"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean1/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.076985,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.129899+00:00",
+      "label": "clean1_integrity_after",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.052932+00:00",
+      "stderr": "clean1_integrity_after.stderr.log",
+      "stdout": "clean1_integrity_after.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "integrity"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean2/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.079716,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.240845+00:00",
+      "label": "clean2_integrity_before",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.161132+00:00",
+      "stderr": "clean2_integrity_before.stderr.log",
+      "stdout": "clean2_integrity_before.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "baseline"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean2/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.214396,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.455326+00:00",
+      "label": "clean2_baseline",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.240941+00:00",
+      "stderr": "clean2_baseline.stderr.log",
+      "stdout": "clean2_baseline.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "acceptance"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean2/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.151172,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.606582+00:00",
+      "label": "clean2_acceptance",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.455423+00:00",
+      "stderr": "clean2_acceptance.stderr.log",
+      "stdout": "clean2_acceptance.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "-c",
+        "import json,pathlib,sys,unittest\nroot=pathlib.Path.cwd()\nsys.path[:0]=[str(root/'source'),str(root/'checks')]\nsuite=unittest.TestLoader().discover(str(root/'candidate_tests'))\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item.id()\nids=list(flatten(suite))\nprint(json.dumps({'count':suite.countTestCases(),'test_ids':ids},sort_keys=True))\n"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean2/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.183785,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.790374+00:00",
+      "label": "clean2_inventory",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.606912+00:00",
+      "stderr": "clean2_inventory.stderr.log",
+      "stdout": "clean2_inventory.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "candidate"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean2/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.200146,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:00.991033+00:00",
+      "label": "clean2_candidate",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.790896+00:00",
+      "stderr": "clean2_candidate.stderr.log",
+      "stdout": "clean2_candidate.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "integrity"
+      ],
+      "cwd": "/tmp/p38b-return-clean-pgvjp_vj/clean2/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.075359,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:01.066232+00:00",
+      "label": "clean2_integrity_after",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:00.991169+00:00",
+      "stderr": "clean2_integrity_after.stderr.log",
+      "stdout": "clean2_integrity_after.stdout.log"
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "RUN_CHECKS.py",
+        "integrity"
+      ],
+      "cwd": "/workspace/scratch/8febe5931947/p38b-r1/repo/06_Dmitriev/SFA-P38B-DEV-R1",
+      "elapsed_seconds": 0.072659,
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "finished_utc": "2026-10-20T03:44:01.171565+00:00",
+      "label": "final_integrity",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "started_utc": "2026-10-20T03:44:01.098908+00:00",
+      "stderr": "final_integrity.stderr.log",
+      "stdout": "final_integrity.stdout.log"
+    }
+  ],
+  "finished_utc": "2026-10-20T03:44:01.171655+00:00",
+  "initial_commands": "initial_commands.json",
+  "orchestrator_scope": "author-side packaging, outside product/return ZIP",
+  "started_utc": "2026-10-20T03:43:59.139418+00:00"
+}

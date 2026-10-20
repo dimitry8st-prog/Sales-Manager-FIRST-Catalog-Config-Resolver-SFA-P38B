@@ -1,0 +1,103 @@
+{
+  "archive_validation": "external after archive close",
+  "boundary": "CATALOG_TO_F128_COMPONENT_ONLY",
+  "clean_runs": [
+    {
+      "acceptance": {
+        "exit_code": 0,
+        "expected_failures": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "tests_run": 13,
+        "unexpected_successes": 0
+      },
+      "baseline": {
+        "exit_code": 0,
+        "expected_failures": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "tests_run": 186,
+        "unexpected_successes": 0
+      },
+      "candidate": {
+        "exit_code": 0,
+        "expected_failures": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "tests_run": 29,
+        "unexpected_successes": 0
+      },
+      "copy": 1,
+      "integrity_after": {
+        "changed": [],
+        "exit_code": 0,
+        "status": "PASS"
+      },
+      "integrity_before": {
+        "changed": [],
+        "exit_code": 0,
+        "status": "PASS"
+      }
+    },
+    {
+      "acceptance": {
+        "exit_code": 0,
+        "expected_failures": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "tests_run": 13,
+        "unexpected_successes": 0
+      },
+      "baseline": {
+        "exit_code": 0,
+        "expected_failures": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "tests_run": 186,
+        "unexpected_successes": 0
+      },
+      "candidate": {
+        "exit_code": 0,
+        "expected_failures": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "tests_run": 29,
+        "unexpected_successes": 0
+      },
+      "copy": 2,
+      "integrity_after": {
+        "changed": [],
+        "exit_code": 0,
+        "status": "PASS"
+      },
+      "integrity_before": {
+        "changed": [],
+        "exit_code": 0,
+        "status": "PASS"
+      }
+    }
+  ],
+  "connected_integration": "NOT_RUN",
+  "independent_acceptance": "NOT_RUN",
+  "native_windows_macos": "NOT_RUN",
+  "original_zip_sha256": "e6208caa91704c67b052f65681f0b59df54aaf5adf4af79fc67c54fddb382a7d",
+  "patch": {
+    "apply_log": "patch_apply.stdout.log",
+    "check_log": "patch_check.stdout.log",
+    "paths": [
+      "candidate_tests/test_resolver.py",
+      "source/first_materials_integration/catalog_config.py"
+    ],
+    "status": "PASS",
+    "tested_source_matches": true
+  },
+  "production_activation": "NOT_RUN",
+  "protected_files": 90,
+  "real_postgresql": "NOT_RUN",
+  "source_installation": "NOT_RUN",
+  "status": "OFFLINE_COMPONENT_CHECKS_PASS",
+  "totals": [
+    228,
+    228
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "Independent verification of final ZIP patch against original archive",
+  "archive_sha256": "633c81da29bf73877c2558dfa928f8e9ff40905ec6ad5e535f1fa363e3092562",
+  "original_files_unchanged": 92,
+  "patch_files": [
+    "06_Dmitriev/SFA-P38B-DEV-R1/candidate_tests/test_resolver.py",
+    "06_Dmitriev/SFA-P38B-DEV-R1/source/first_materials_integration/catalog_config.py"
+  ],
+  "patch_reconstructed_bytes_equal_final_zip": true,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "apply",
+        "--check",
+        "/tmp/p38b-independent-patch-ca1dy3gy/return.patch"
+      ],
+      "cwd": "/tmp/p38b-independent-patch-ca1dy3gy/06_Dmitriev/SFA-P38B-DEV-R1",
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "git",
+        "apply",
+        "/tmp/p38b-independent-patch-ca1dy3gy/return.patch"
+      ],
+      "cwd": "/tmp/p38b-independent-patch-ca1dy3gy/06_Dmitriev/SFA-P38B-DEV-R1",
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 0
+    }
+  ]
+}
